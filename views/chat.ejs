@@ -68,6 +68,10 @@ body {font-family: "Lato", sans-serif;}
     float: right;
     height: 50px;
 }
+
+hr.solid {
+  border-top: 3px solid #bbb;
+}
 </style>
 <html>
     <body onload="checkLogin()">
@@ -93,7 +97,7 @@ body {font-family: "Lato", sans-serif;}
 <script>
     const END_POINT = 'http://192.168.0.12:8082';
     var socket=io();
-
+    
     const left_tab = document.getElementById('hist_tab');
     const message_zone = document.getElementById('message_bubble');
     const messContent = document.getElementById('inputMess');
@@ -102,6 +106,9 @@ body {font-family: "Lato", sans-serif;}
     var myID_json = sessionStorage.getItem('login_data');
         var myID = JSON.parse(myID_json)['id'];
 
+    socket.on(myID, function(data){
+
+    })
     messContent.addEventListener('keyup', function(event){
         if(event.keyCode===13)
         {
@@ -156,7 +163,8 @@ body {font-family: "Lato", sans-serif;}
                         <div>
                             <h3 style="color:red;">${response_init[i].username}</h3>
                             <p style="color:red;">${block[j].content}</p>
-                        </div>`
+                        </div>
+                        <hr class="solid">`
                     }
                     else if(block[j].sender != response_init[i].userID)
                     {
@@ -164,7 +172,8 @@ body {font-family: "Lato", sans-serif;}
                         <div >
                             <h3>${myID}</h3>
                             <p>${block[j].content}</p>
-                        </div>`
+                        </div>
+                        <hr class="solid">`
                     }
                     message_zone.insertAdjacentHTML("beforeend", mess_block);
                 }
@@ -180,7 +189,8 @@ body {font-family: "Lato", sans-serif;}
                         <div >
                             <h3>${myID}</h3>
                             <p>${messContent.value}</p>
-                        </div>`;
+                        </div>
+                        <hr class="solid">`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
             messContainer.scrollTop = messContainer.scrollHeight;
         }    
