@@ -1,0 +1,29 @@
+{
+  "name": "btl86_prj",
+  "version": "1.0.0",
+  "description": "blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "ahihi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dovanan95/btl86_application.git"
+  },
+  "keywords": [
+    "HLF"
+  ],
+  "author": "Do Van An",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dovanan95/btl86_application/issues"
+  },
+  "homepage": "https://github.com/dovanan95/btl86_application#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "multer": "^1.4.3",
+    "socket.io": "^4.4.0"
+  }
+}
