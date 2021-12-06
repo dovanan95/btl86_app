@@ -47,9 +47,15 @@ body {font-family: "Lato", sans-serif;}
   border-left: none;
   height: 500px;
   overflow: auto;
-  position: relative;
+
 }
 
+.input_form{
+    position: absolute;
+    position: sticky;
+    bottom: 50;
+    top: 430px;;
+}
 
 .input_mess{
     float: right;
@@ -69,28 +75,32 @@ body {font-family: "Lato", sans-serif;}
         <div class="tab" id='hist_tab'>
             <!--button class="tablinks" >Chat History</button-->
           </div>
-          <div  class="tabcontent">
+          <div id='mess_container' class="tabcontent">
               <div id="message_bubble">
                 <h3>Message</h3>
                 <!--p>Chat Content</p-->
               </div>
-             
+              <div class="input_form">  
+                <button onclick="sendMess()" id="button_send_mess"  class="send_button">SEND</button>
+                <input id='inputMess' class="input_mess" placeholder="Input Message Here"/>
+            </div>
           </div>
-          <div>  
-            <button onclick="sendMess()" id="button_send_mess"  class="send_button">SEND</button>
-            <input id='inputMess' class="input_mess" placeholder="Input Message Here"/>
-        </div>
+          
     </body>
 </html>
 <script type="text/javascript" src="./socket.io.min.js"></script>
 <script type="text/javascript" src="./jquery-3.6.0.js"></script>
 <script>
-    const END_POINT = 'http://192.168.1.12:8082';
+    const END_POINT = 'http://192.168.0.12:8082';
     var socket=io();
 
     const left_tab = document.getElementById('hist_tab');
     const message_zone = document.getElementById('message_bubble');
     const messContent = document.getElementById('inputMess');
+    const messContainer = document.getElementById('mess_container');
+
+    var myID_json = sessionStorage.getItem('login_data');
+        var myID = JSON.parse(myID_json)['id'];
 
     messContent.addEventListener('keyup', function(event){
         if(event.keyCode===13)
@@ -131,6 +141,7 @@ body {font-family: "Lato", sans-serif;}
     function choosePartner(id){
         sessionStorage.setItem('current_partner_id', id);
         message_zone.innerHTML=``;
+        
         for(var i in response_init)
         {
             if(id==response_init[i].userID)
@@ -151,7 +162,7 @@ body {font-family: "Lato", sans-serif;}
                     {
                         mess_block = `
                         <div >
-                            <h3>Do Van An</h3>
+                            <h3>${myID}</h3>
                             <p>${block[j].content}</p>
                         </div>`
                     }
@@ -167,10 +178,11 @@ body {font-family: "Lato", sans-serif;}
         {
             mess_block = `
                         <div >
-                            <h3>Do Van An</h3>
+                            <h3>${myID}</h3>
                             <p>${messContent.value}</p>
                         </div>`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
+            messContainer.scrollTop = messContainer.scrollHeight;
         }    
     }
 </script>
