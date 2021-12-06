@@ -72,6 +72,27 @@ body {font-family: "Lato", sans-serif;}
 hr.solid {
   border-top: 3px solid #bbb;
 }
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
 </style>
 <html>
     <body onload="checkLogin()">
@@ -160,20 +181,18 @@ hr.solid {
                     if(block[j].sender == response_init[i].userID)
                     {
                         mess_block = `
-                        <div>
+                        <div class="container">
                             <h3 style="color:red;">${response_init[i].username}</h3>
                             <p style="color:red;">${block[j].content}</p>
-                        </div>
-                        <hr class="solid">`
+                        </div>`
                     }
                     else if(block[j].sender != response_init[i].userID)
                     {
                         mess_block = `
-                        <div >
+                        <div class="container darker">
                             <h3>${myID}</h3>
                             <p>${block[j].content}</p>
-                        </div>
-                        <hr class="solid">`
+                        </div>`
                     }
                     message_zone.insertAdjacentHTML("beforeend", mess_block);
                 }
@@ -186,11 +205,10 @@ hr.solid {
         if(current_partner != null)
         {
             mess_block = `
-                        <div >
+                        <div class="container darker">
                             <h3>${myID}</h3>
                             <p>${messContent.value}</p>
-                        </div>
-                        <hr class="solid">`;
+                        </div>`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
             messContainer.scrollTop = messContainer.scrollHeight;
         }    
