@@ -31,9 +31,9 @@ async function queryNameUser(id){
       
       //socketIo.emit("sendDataServer", { 'data': data, 'socket': socket.id });
     })
-    socket.on("sendMess", function(data){
+    socket.on("sendMess", async function(data){
        console.log(data);
-       var sender_name = queryNameUser(data.sender);
+       var sender_name = await queryNameUser(data.sender);
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
         'receiver': data.receiver, 
@@ -127,6 +127,10 @@ app.get('/chat', function(req, res){
 })
 
 app.get('chat_peer', function(req, res){
+    console.log(req.query.partner_ID);
+})
+
+app.get('init_new_chat', function(req, res){
     console.log(req.query.partner_ID);
 })
 
