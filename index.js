@@ -18,6 +18,7 @@ const socketIo = require("socket.io")(server, {
 
 async function queryNameUser(id){
     //query chaincode
+    return("name_test");
 }
 
  socketIo.on("connection", (socket) => {
@@ -32,7 +33,7 @@ async function queryNameUser(id){
     })
     socket.on("sendMess", function(data){
        console.log(data);
-       var sender_name = await queryNameUser(data.sender);
+       var sender_name = queryNameUser(data.sender);
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
         'receiver': data.receiver, 
