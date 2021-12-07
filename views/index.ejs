@@ -130,11 +130,12 @@ span.psw {
          }
       }
       var res = await fetch(END_POINT + "/login", options);
-      var json_res = await res.text();
+      var json_res = await res.json();
       console.log(json_res);
-      if(json_res=='OK')
+      if(json_res.result=='OK')
       {
-        sessionStorage.setItem('login_data', JSON.stringify({'id': id.value, 'isLogin': true}));
+        sessionStorage.setItem('login_data', JSON.stringify({'id': id.value, 'isLogin': true, 
+        'my_username': json_res.username}));
         //sessionStorage.setItem('data', 'OK');
         window.location.href=END_POINT+'/chat?userID='+id.value;
       }

@@ -146,7 +146,7 @@ hr.solid {
             var tab_partner_el = 
             `
                 <button class="tablinks" onclick=choosePartner(this.id) 
-                id="${data.sender}">${sender.sender_name}</button>
+                id="${data.sender}">${data.sender_name}</button>
                 <hr class="solid">
             `
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
@@ -266,6 +266,8 @@ hr.solid {
     function sendMess()
     {
         var current_partner = sessionStorage.getItem('current_partner_id');
+        var login_data = sessionStorage.getItem('login_data');
+        var my_name = JSON.parse(login_data)['my_username'];
         if(current_partner != null)
         {
             mess_block = `
@@ -275,7 +277,8 @@ hr.solid {
                         </div>`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
             messContainer.scrollTop = messContainer.scrollHeight;
-            socket.emit("sendMess", {'sender': myID, 'receiver': current_partner, 'message': messContent.value});
+            socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
+             'receiver': current_partner, 'message': messContent.value});
         }    
     }
 </script>

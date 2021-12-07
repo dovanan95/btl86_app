@@ -33,12 +33,12 @@ async function queryNameUser(id){
     })
     socket.on("sendMess", async function(data){
        console.log(data);
-       var sender_name = await queryNameUser(data.sender);
+       //var sender_name = await queryNameUser(data.sender);
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
         'receiver': data.receiver, 
         'message': data.message, 
-        'sender_name': sender_name});
+        'sender_name': data.sender_name});
     })
   
     socket.on("disconnect", () => {
@@ -62,9 +62,10 @@ app.use(express.static(__dirname + '/views'));
 app.get('/', function(req, res){
     res.render('./views/index', {'data':'Commander System'});
 })
-app.post('/login', function(req, res){
+app.post('/login',async function(req, res){
     console.log(req.body);
-    res.send('OK');
+    var username = await queryNameUser(req.body.id);
+    res.send({'result': 'OK', 'username': username});
 })
 
 var sample_chat_data = [
