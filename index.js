@@ -16,6 +16,10 @@ const socketIo = require("socket.io")(server, {
  });
 //const socketIo = require("socket.io")(server);
 
+async function queryNameUser(id){
+    //query chaincode
+}
+
  socketIo.on("connection", (socket) => {
     console.log("New client connected" + socket.id);
     const ID = socket.id // id property on the socket Object
@@ -28,8 +32,12 @@ const socketIo = require("socket.io")(server, {
     })
     socket.on("sendMess", function(data){
        console.log(data);
-       //console.log('responseMes'+String(data.receiver));
-       //socketIo.emit('responseMes'+String(data.receiver), {'sender': data.sender, 'receiver': data.receiver, 'message': data.message});
+       var sender_name = await queryNameUser(data.sender);
+       socketIo.emit(String(data.receiver),
+        {'sender': data.sender, 
+        'receiver': data.receiver, 
+        'message': data.message, 
+        'sender_name': sender_name});
     })
   
     socket.on("disconnect", () => {
@@ -113,7 +121,12 @@ var sample_chat_data = [
     ];
 
 app.get('/chat', function(req, res){
+    console.log(req.query.userID);
     res.render('./views/chat', {'data': JSON.stringify(sample_chat_data)});
+})
+
+app.get('chat_peer', function(req, res){
+    console.log(req.query.partner_ID);
 })
 
 app.get('/home', function(req, res){

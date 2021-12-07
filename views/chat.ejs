@@ -129,7 +129,28 @@ hr.solid {
         var myID = JSON.parse(myID_json)['id'];
 
     socket.on(myID, function(data){
-
+        console.log(data);
+        var current_partner = sessionStorage.getItem('current_partner_id');
+        if(data.sender == current_partner)
+        {
+            var mess_block = `
+                        <div class="container">
+                            <h3 style="color:red;">${data.sender_name}</h3>
+                            <p style="color:red;">${block[i].message}</p>
+                        </div>`;
+            message_zone.insertAdjacentHTML("beforeend", mess_block);
+            messContainer.scrollTop = messContainer.scrollHeight;
+        }
+        else if(data.sender != current_partner)
+        {
+            var tab_partner_el = 
+            `
+                <button class="tablinks" onclick=choosePartner(this.id) 
+                id="${data.sender}">${sender.sender_name}</button>
+                <hr class="solid">
+            `
+            left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+        }
     })
     messContent.addEventListener('keyup', function(event){
         if(event.keyCode===13)
@@ -168,6 +189,45 @@ hr.solid {
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
         }
     }
+    async function getBlockByID(id){
+        //code call API get to /chat_peer
+    }
+    async function choosePartnet_2(id){
+        sessionStorage.setItem('current_partner_id', id);
+
+        //callAPI(id)
+        var block = await getBlockByID(id); //API call result
+        var username;
+        for(var k in response_init)
+        {
+            if(response_init[k].userID==id)
+            {
+                username=response_init[k].username;
+            }
+        }
+        for(var i in block)
+        {
+            var mess_block;
+            if(block[i].sender==id)
+            {
+                mess_block = `
+                        <div class="container">
+                            <h3 style="color:red;">${username}</h3>
+                            <p style="color:red;">${block[i].content}</p>
+                        </div>`
+            }
+            else if(block[i].sender != id)
+            {
+                mess_block = `
+                        <div class="container darker">
+                            <h3>${myID}</h3>
+                            <p>${block[i].content}</p>
+                        </div>`
+            }
+            message_zone.insertAdjacentHTML("beforeend", mess_block);
+        }
+    }
+
     function choosePartner(id){
         sessionStorage.setItem('current_partner_id', id);
         message_zone.innerHTML=``;
@@ -213,6 +273,7 @@ hr.solid {
                         </div>`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
             messContainer.scrollTop = messContainer.scrollHeight;
+            socket.emit("sendMess", {'sender': myID, 'receiver': current_partner, 'message': messContent.value});
         }    
     }
 </script>
