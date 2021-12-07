@@ -72,7 +72,7 @@ span.psw {
 }
 </style>
 <h1><%= data %></h1>
-
+<%- include('./header')%>
 <body onload="init()">
     <form action="action_page.php" method="post">
         <div class="container">
@@ -101,7 +101,7 @@ span.psw {
     var id = document.getElementById('id_user');
     var password = document.getElementById('pw_user');
 
-    const END_POINT = 'http://192.168.0.12:8082';
+    const END_POINT = 'http://192.168.1.12:8082';
     var socket= io();
     socket.on('getId', (data)=>{
         console.log(data);

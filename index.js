@@ -116,6 +116,10 @@ app.get('/chat', function(req, res){
     res.render('./views/chat', {'data': JSON.stringify(sample_chat_data)});
 })
 
+app.get('/home', function(req, res){
+    res.send('home');
+})
+
 server.listen(8082, () => {
     console.log('Server đang chay tren cong 8082');
  });
