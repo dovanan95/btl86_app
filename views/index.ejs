@@ -136,7 +136,6 @@ span.psw {
       {
         sessionStorage.setItem('login_data', JSON.stringify({'id': id.value, 'isLogin': true, 
         'my_username': json_res.username}));
-        //sessionStorage.setItem('data', 'OK');
         window.location.href=END_POINT+'/chat?userID='+id.value;
       }
       

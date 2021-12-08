@@ -124,19 +124,24 @@ var sample_chat_data = [
 
 app.get('/chat', function(req, res){
     console.log(req.query.userID);
-    res.render('./views/chat', {'data': JSON.stringify(sample_chat_data)});
+    res.render('./views/chat');
 })
 
-app.get('chat_peer', function(req, res){
+app.post('/load_chat_history', function(req, res){
+    console.log(req.body.id);
+    res.send(JSON.stringify(sample_chat_data));
+})
+
+app.get('/chat_peer', function(req, res){
     console.log(req.query.partner_ID);
 })
 
-app.get('init_new_chat', function(req, res){
+app.get('/init_new_chat', function(req, res){
     console.log(req.query.partner_ID);
 })
 
 app.get('/home', function(req, res){
-    res.send('home');
+    res.render('./views/home');
 })
 
 server.listen(8082, () => {

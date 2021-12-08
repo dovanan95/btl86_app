@@ -127,6 +127,7 @@ hr.solid {
 
     var myID_json = sessionStorage.getItem('login_data');
         var myID = JSON.parse(myID_json)['id'];
+        var my_name = JSON.parse(myID_json)['my_username'];
 
     socket.on(myID, function(data){
         console.log(data);
@@ -159,11 +160,10 @@ hr.solid {
         } 
     })
 
-    var response_init = JSON.parse('<%-data%>');
     function checkLogin(){
        var check = sessionStorage.getItem('login_data');
        sessionStorage.removeItem('current_partner_id');
-       //var response_init = JSON.parse('<%-data%>');
+    
        console.log(response_init);
        var check_json = JSON.parse(check);
        if(check_json ==null || check_json.isLogin != true)
@@ -175,8 +175,17 @@ hr.solid {
             fetchData();
        }
     }
-    function fetchData(){
-        
+    var response_init;
+    async function fetchData(){
+        const options = {
+            method: 'POST',
+            body: JSON.stringify({'id': myID}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        var response_init_load = await fetch(END_POINT + "/load_chat_history", options);
+        response_init = await response_init_load.json(); //console.log('response_init', response_init);
         for(var i in response_init)
         {
             console.log(response_init[i]);
@@ -254,7 +263,7 @@ hr.solid {
                     {
                         mess_block = `
                         <div class="container darker">
-                            <h3>${myID}</h3>
+                            <h3>${my_name}</h3>
                             <p>${block[j].content}</p>
                         </div>`
                     }
@@ -266,13 +275,11 @@ hr.solid {
     function sendMess()
     {
         var current_partner = sessionStorage.getItem('current_partner_id');
-        var login_data = sessionStorage.getItem('login_data');
-        var my_name = JSON.parse(login_data)['my_username'];
         if(current_partner != null)
         {
             mess_block = `
                         <div class="container darker">
-                            <h3>${myID}</h3>
+                            <h3>${my_name}</h3>
                             <p>${messContent.value}</p>
                         </div>`;
             message_zone.insertAdjacentHTML("beforeend", mess_block);
