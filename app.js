@@ -26,7 +26,7 @@ async function queryNameUser(id){
     const ID = socket.id // id property on the socket Object
     socketIo.to(ID).emit("getId", socket.id);
   
-    socket.on("sendDataClient", function(data) {
+    socket.on("sendRoom", function(data) {
       console.log(data);
       
       //socketIo.emit("sendDataServer", { 'data': data, 'socket': socket.id });
@@ -132,18 +132,27 @@ app.post('/load_chat_history', function(req, res){
     res.send(JSON.stringify(sample_chat_data));
 })
 
+//for chat one to one from chat history
 app.get('/chat_peer', function(req, res){
     console.log(req.query.partner_ID);
 })
 
+//for chat room
+app.post('/chat_room', function(req, res){
+    console.log(req.body.room_ID);
+})
+
+//for begin chat with one user from query
 app.get('/init_new_chat', function(req, res){
     console.log(req.query.partner_ID);
 })
 
+//for user search result
 app.get('/home', function(req, res){
     res.render('./views/home');
 })
 
+//for user search
 app.get('/searchUserByID', function(req, res){
     console.log(req.query.id);
     res.send(JSON.stringify({'data': req.query.id}));
