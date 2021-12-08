@@ -133,18 +133,18 @@ app.post('/load_chat_history', function(req, res){
 })
 
 //for chat one to one from chat history
-app.get('/chat_peer', function(req, res){
-    console.log(req.query.partner_ID);
+app.post('/chat_peer', function(req, res){
+    console.log({'partner_ID': req.body.partner_ID, 'my_ID': req.body.my_ID});
 })
 
-//for chat room
+//for chat room (dev in future)
 app.post('/chat_room', function(req, res){
-    console.log(req.body.room_ID);
+    console.log({'room_ID': req.body.room_ID, 'docType':req.body.type});
 })
 
 //for begin chat with one user from query
-app.get('/init_new_chat', function(req, res){
-    console.log(req.query.partner_ID);
+app.post('/init_new_chat', function(req, res){
+    console.log(req.body.partner_ID);
 })
 
 //for user search result
