@@ -143,14 +143,26 @@ hr.solid {
             messContainer.scrollTop = messContainer.scrollHeight;
         }
         else if(data.sender != current_partner)
-        {
-            var tab_partner_el = 
-            `
-                <button class="tablinks" onclick=choosePartner(this.id) 
-                id="${data.sender}">${data.sender_name}</button>
-                <hr class="solid">
-            `
-            left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+        {   
+            var flag =0;
+            for(var k in response_init)
+            {
+                if(data.sender==response_init[k]['userID'])
+                {
+                    flag=1;
+                }
+            }
+            if(flag==0)
+            {
+                var tab_partner_el = 
+                `
+                    <button class="tablinks" onclick=choosePartner(this.id) 
+                    id="${data.sender}">${data.sender_name}</button>
+                    <hr class="solid">
+                `
+                left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+            }
+            
         }
     })
     messContent.addEventListener('keyup', function(event){
