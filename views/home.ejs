@@ -59,7 +59,7 @@ body {
     </div>
 </div>
 <div class="div2" style="margin:left; padding-left: 10px;">
-    <p>ahihi</p>
+    <p id="exist">ahihi</p>
 </div>
 
 
@@ -67,11 +67,25 @@ body {
 </html> 
 <script>
     var id = document.getElementById("input_ID");
+    var infor = document.getElementById('exist');
     async function search()
     {
-        console.log(id.value);
         var res = await fetch('/searchUserByID?id='+id.value);
         var res_json = await res.json();
         console.log(res_json);
+        if(res_json.data == 'no_data')
+        {
+          infor.innerHTML='no information';
+        }
+        else if(res_json.data != 'no_data')
+        {
+          infor.innerHTML='user: ';
+          var node=document.createElement('a');
+          var text_node = document.createTextNode(res_json.data['username']);
+          node.appendChild(text_node);
+          node.href="/user_information?id_user="+res_json.data['userID']
+          +"&username="+res_json.data['username'];
+          infor.appendChild(node);
+        }
     }
 </script>

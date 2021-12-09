@@ -152,10 +152,26 @@ app.get('/home', function(req, res){
     res.render('./views/home');
 })
 
+const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 //for user search
 app.get('/searchUserByID', function(req, res){
     console.log(req.query.id);
-    res.send(JSON.stringify({'data': req.query.id}));
+    if(req.query.id=='001')
+    {
+        res.send(JSON.stringify({'data': sample_user_data_1}));
+    }
+    else
+    {
+        res.send(JSON.stringify({'data': 'no_data'}));
+    }
+})
+
+app.get('/user_information', function(req, res){
+    console.log(req.query.username);
+    var user_id = req.query.id_user;
+    var user_name = req.query.username;
+    res.render('./views/profile',
+    {'data':JSON.stringify({'user_id': user_id, 'user_name': user_name})});
 })
 
 server.listen(8082, () => {
