@@ -1,12 +1,30 @@
 <html>
+    <h1>PROFILE</h1>
+    <%- include('./header')%>
     <body onload="loadUI()">
-        <p>ml</a></p>
+        <div>
+            <p id="name">name:</p>
+            <p id="ID">ID:</p>
+        </div>  
+        <div>
+            <button id="chat_button" onclick="connect()">Contact</button>
+        </div>
     </body>
 </html>
 <script>
-    var response_init = '<%-data%>'
+    var response_init = '<%-data%>';
+    var id = document.getElementById('ID');
+    var username = document.getElementById('name');
     function loadUI()
     {
-        console.log(response_init);
+        var response_json = JSON.parse(response_init);
+        id.innerHTML='ID: '+response_json.user_id;
+        username.innerHTML='name: '+ response_json.user_name;
+    }
+    function connect()
+    {
+        var myID_json = sessionStorage.getItem('login_data');
+        var myID = JSON.parse(myID_json)['id'];
+        var my_name = JSON.parse(myID_json)['my_username'];
     }
 </script>

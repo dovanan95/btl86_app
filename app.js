@@ -33,7 +33,7 @@ async function queryNameUser(id){
     })
     socket.on("sendMess", async function(data){
        console.log(data);
-       //var sender_name = await queryNameUser(data.sender);
+       //save message to server then response to receiver
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
         'receiver': data.receiver, 
@@ -85,7 +85,13 @@ var sample_chat_data = [
                     'receiver': '001',
                     'content': 'bye',
                     'timestamp': 2
-                }
+                },
+                {
+                    'sender': 'myID',
+                    'receiver': '001',
+                    'content': 'ahihi',
+                    'timestamp': 3
+                },
             ]
         },
         {
@@ -144,7 +150,7 @@ app.post('/chat_room', function(req, res){
 
 //for begin chat with one user from query
 app.post('/init_new_chat', function(req, res){
-    console.log(req.body.partner_ID);
+    console.log( {'partner_ID': req.body.partner_ID, 'myID': req.body.myID});
 })
 
 //for user search result
@@ -156,7 +162,8 @@ const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 //for user search
 app.get('/searchUserByID', function(req, res){
     console.log(req.query.id);
-    if(req.query.id=='001')
+    //neccessary to check if userID exist and response true/false
+    if(req.query.id=='001') //only for test, change condition when finish develop chaincode
     {
         res.send(JSON.stringify({'data': sample_user_data_1}));
     }
@@ -167,7 +174,6 @@ app.get('/searchUserByID', function(req, res){
 })
 
 app.get('/user_information', function(req, res){
-    console.log(req.query.username);
     var user_id = req.query.id_user;
     var user_name = req.query.username;
     res.render('./views/profile',

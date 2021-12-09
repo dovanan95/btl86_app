@@ -92,6 +92,33 @@ hr.solid {
   display: table;
 }
 
+.msger-inputarea {
+  display: flex;
+  padding: 10px;
+  border-top: var(--border);
+  background: #eee;
+}
+.msger-inputarea * {
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+}
+.msger-input {
+  flex: 1;
+  background: #ddd;
+}
+.msger-send-btn {
+  margin-left: 10px;
+  background: rgb(0, 196, 65);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.23s;
+}
+.msger-send-btn:hover {
+  background: rgb(0, 180, 50);
+}
 
 </style>
 <html>
@@ -106,12 +133,12 @@ hr.solid {
                 <h3>Message</h3>
                 <!--p>Chat Content</p-->
               </div>
-              <div class="input_form">  
-                <button onclick="sendMess()" id="button_send_mess" class="send_button">SEND</button>
-                <input id='inputMess' class="input_mess" placeholder="Input Message Here"/>
-            </div>
+            
           </div>
-          
+          <div class="msger-inputarea">  
+            <input id='inputMess'  class="msger-input" placeholder="Input Message Here"/>
+            <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
+        </div>
     </body>
 </html>
 <script type="text/javascript" src="./socket.io.min.js"></script>
@@ -243,7 +270,7 @@ hr.solid {
             {
                 mess_block = `
                         <div class="container darker">
-                            <h3>${myID}</h3>
+                            <h3>${my_name}</h3>
                             <p>${block[i].content}</p>
                         </div>`
             }
