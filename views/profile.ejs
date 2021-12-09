@@ -60,7 +60,7 @@
                 <span class="close">&times;</span>
                 <p id="to_user">Message:</p>
                 <div>
-                    <textarea id="content" name="content" placeholder="Write Message.." style="height:200px; width: 500px;"></textarea>
+                    <textarea id="content" name="content" placeholder="Write Message.." style="height:200px; width: auto;"></textarea>
                 </div>
                 <br/>
                 <div>
@@ -83,6 +83,12 @@
     var username = document.getElementById('name');
     var content = document.getElementById('content');
 
+    var myID_json = sessionStorage.getItem('login_data');
+        var myID = JSON.parse(myID_json)['id'];
+        var my_name = JSON.parse(myID_json)['my_username'];
+
+    var socket=io();
+
     var response_json = JSON.parse(response_init);
     function loadUI()
     {  
@@ -103,6 +109,8 @@
     function sendMess()
     {
         console.log(content.value);
+        socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
+             'receiver': response_json.user_id, 'message': content.value})
     }
     var modal = document.getElementById("myModal");
 

@@ -22,7 +22,7 @@ async function queryNameUser(id){
 }
 
  socketIo.on("connection", (socket) => {
-    console.log("New client connected" + socket.id);
+    console.log("New client connected ->" + socket.id);
     const ID = socket.id // id property on the socket Object
     socketIo.to(ID).emit("getId", socket.id);
   
