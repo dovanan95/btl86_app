@@ -207,7 +207,7 @@ hr.solid {
        var check_json = JSON.parse(check);
        if(check_json ==null || check_json.isLogin != true)
        {
-           window.location.href=END_POINT;
+           window.location.href='/';
        }
        else
        {
@@ -230,7 +230,7 @@ hr.solid {
             console.log(response_init[i]);
             var tab_partner_el = 
             `
-                <button class="tablinks" onclick=choosePartner(this.id) 
+                <button class="tablinks" onclick=choosePartner(this.id) docType=${response_init[i].docType}
                 id="${response_init[i].userID}">${response_init[i].username}</button>
                 <hr class="solid">
             `
@@ -314,17 +314,23 @@ hr.solid {
     function sendMess()
     {
         var current_partner = sessionStorage.getItem('current_partner_id');
+        var partner_element = document.getElementById(current_partner);
+        var docType = partner_element.getAttribute('docType');
         if(current_partner != null)
         {
-            mess_block = `
+            if(docType=='private_message')
+            {
+                mess_block = `
                         <div class="container darker">
                             <h3>${my_name}</h3>
                             <p>${messContent.value}</p>
                         </div>`;
-            message_zone.insertAdjacentHTML("beforeend", mess_block);
-            messContainer.scrollTop = messContainer.scrollHeight;
-            socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
-             'receiver': current_partner, 'message': messContent.value});
+                message_zone.insertAdjacentHTML("beforeend", mess_block);
+                messContainer.scrollTop = messContainer.scrollHeight;
+                socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
+                'receiver': current_partner, 'message': messContent.value});
+            }
+            
         }    
     }
 </script>
