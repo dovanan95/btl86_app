@@ -159,38 +159,42 @@ hr.solid {
     socket.on(myID, function(data){
         console.log(data);
         var current_partner = sessionStorage.getItem('current_partner_id');
-        if(data.sender == current_partner)
+        if(data.docType=='private_message')
         {
-            var mess_block = `
-                        <div class="container">
-                            <h3 style="color:red;">${data.sender_name}</h3>
-                            <p style="color:red;">${data.message}</p>
-                        </div>`;
-            message_zone.insertAdjacentHTML("beforeend", mess_block);
-            messContainer.scrollTop = messContainer.scrollHeight;
-        }
-        else if(data.sender != current_partner)
-        {   
-            var flag =0;
-            for(var k in response_init)
+            if(data.sender == current_partner)
             {
-                if(data.sender==response_init[k]['userID'])
+                var mess_block = `
+                            <div class="container">
+                                <h3 style="color:red;">${data.sender_name}</h3>
+                                <p style="color:red;">${data.message}</p>
+                            </div>`;
+                message_zone.insertAdjacentHTML("beforeend", mess_block);
+                messContainer.scrollTop = messContainer.scrollHeight;
+            }
+            else if(data.sender != current_partner)
+            {   
+                var flag =0;
+                for(var k in response_init)
                 {
-                    flag=1;
+                    if(data.sender==response_init[k]['userID'])
+                    {
+                        flag=1;
+                    }
                 }
+                if(flag==0)
+                {
+                    var tab_partner_el = 
+                    `
+                        <button class="tablinks" onclick=choosePartner(this.id) docType=${data.docType}
+                        id="${data.sender}">${data.sender_name}</button>
+                        <hr class="solid">
+                    `
+                    left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+                }
+                
             }
-            if(flag==0)
-            {
-                var tab_partner_el = 
-                `
-                    <button class="tablinks" onclick=choosePartner(this.id) 
-                    id="${data.sender}">${data.sender_name}</button>
-                    <hr class="solid">
-                `
-                left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
-            }
-            
         }
+        
     })
     messContent.addEventListener('keyup', function(event){
         if(event.keyCode===13)
@@ -237,45 +241,54 @@ hr.solid {
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
         }
     }
-    async function getBlockByID(id){
+    async function getBlockByID(partner_id, docType){
         //code call API get to /chat_peer
         var block;
+        if(docType=='private_message')
+        {
+            //code
+        }
         return(block);
     }
     async function choosePartnet_2(id){
         sessionStorage.setItem('current_partner_id', id);
-
+        var partner_element = document.getElementById(id);
+        var docType = partner_element.getAttribute('docType');
         //callAPI(id)
-        var block = await getBlockByID(id); //API call result
-        var username;
-        for(var k in response_init)
+        if(docType=='private_message')
         {
-            if(response_init[k].userID==id)
+            var block = await getBlockByID(id, docType); //API call result
+            var username;
+            for(var k in response_init)
             {
-                username=response_init[k].username;
+                if(response_init[k].userID==id)
+                {
+                    username=response_init[k].username;
+                }
+            }
+            for(var i in block)
+            {
+                var mess_block;
+                if(block[i].sender==id)
+                {
+                    mess_block = `
+                            <div class="container">
+                                <h3 style="color:red;">${username}</h3>
+                                <p style="color:red;">${block[i].content}</p>
+                            </div>`
+                }
+                else if(block[i].sender != id)
+                {
+                    mess_block = `
+                            <div class="container darker">
+                                <h3>${my_name}</h3>
+                                <p>${block[i].content}</p>
+                            </div>`
+                }
+                message_zone.insertAdjacentHTML("beforeend", mess_block);
             }
         }
-        for(var i in block)
-        {
-            var mess_block;
-            if(block[i].sender==id)
-            {
-                mess_block = `
-                        <div class="container">
-                            <h3 style="color:red;">${username}</h3>
-                            <p style="color:red;">${block[i].content}</p>
-                        </div>`
-            }
-            else if(block[i].sender != id)
-            {
-                mess_block = `
-                        <div class="container darker">
-                            <h3>${my_name}</h3>
-                            <p>${block[i].content}</p>
-                        </div>`
-            }
-            message_zone.insertAdjacentHTML("beforeend", mess_block);
-        }
+        
     }
 
     function choosePartner(id){
