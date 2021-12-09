@@ -17,3 +17,7 @@ const query_room_message = {
     "limit": 100,
     "skip": 0
 }
+
+const query_authen={
+    "selector":{"userID":"xxx", "password":"yyy"}
+}
