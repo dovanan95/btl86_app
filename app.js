@@ -38,7 +38,9 @@ async function queryNameUser(id){
         {'sender': data.sender, 
         'receiver': data.receiver, 
         'message': data.message, 
-        'sender_name': data.sender_name});
+        'sender_name': data.sender_name,
+        'docType': 'private_message'
+    });
     })
   
     socket.on("disconnect", () => {
@@ -72,25 +74,29 @@ var sample_chat_data = [
         {   
             userID: '001',
             username: 'LTE',
+            docType: 'private_message',
             message_block:
             [
                 {
                     'sender': '001',
                     'receiver': 'myID',
                     'content': 'hello',
-                    'timestamp': 1
+                    'timestamp': 1,
+                    'docType': 'private_message'
                 },
                 {
                     'sender': 'myID',
                     'receiver': '001',
                     'content': 'bye',
-                    'timestamp': 2
+                    'timestamp': 2,
+                    'docType': 'private_message'
                 },
                 {
                     'sender': 'myID',
                     'receiver': '001',
                     'content': 'ahihi',
-                    'timestamp': 3
+                    'timestamp': 3,
+                    'docType': 'private_message'
                 },
             ]
         },
@@ -98,31 +104,36 @@ var sample_chat_data = [
             
             userID: '002',
             username: 'LTA',
+            docType: 'private_message',
             message_block:
             [
                 {
                     'sender': '002',
                     'receiver': 'myID',
                     'content': 'Ok em',
-                    'timestamp': 1
+                    'timestamp': 1,
+                    'docType': 'private_message'
                 },
                 {
                     'sender': 'myID',
                     'receiver': '002',
                     'content': 'Vang',
-                    'timestamp': 2
+                    'timestamp': 2,
+                    'docType': 'private_message'
                 },
                 {
                     'sender': 'myID',
                     'receiver': '002',
                     'content': 'Em xin cam on',
-                    'timestamp': 3
+                    'timestamp': 3,
+                    'docType': 'private_message'
                 },
                 {
                     'sender': '002',
                     'receiver': 'myID',
                     'content': 'Khong co gi',
-                    'timestamp': 4
+                    'timestamp': 4,
+                    'docType': 'private_message'
                 }
             ]
         }

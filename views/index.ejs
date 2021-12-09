@@ -101,7 +101,7 @@ span.psw {
     var id = document.getElementById('id_user');
     var password = document.getElementById('pw_user');
 
-    const END_POINT = 'http://192.168.0.12:8082';
+    const END_POINT = 'http://localhost:8082';
     var socket= io();
     socket.on('getId', (data)=>{
         console.log(data);
@@ -136,7 +136,7 @@ span.psw {
       {
         sessionStorage.setItem('login_data', JSON.stringify({'id': id.value, 'isLogin': true, 
         'my_username': json_res.username}));
-        window.location.href=END_POINT+'/chat?userID='+id.value;
+        window.location.href='/chat?userID='+id.value;
       }
       
     }

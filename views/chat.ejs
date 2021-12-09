@@ -144,7 +144,7 @@ hr.solid {
 <script type="text/javascript" src="./socket.io.min.js"></script>
 <script type="text/javascript" src="./jquery-3.6.0.js"></script>
 <script>
-    const END_POINT = 'http://192.168.0.12:8082';
+    const END_POINT = 'http://localhost:8082';
     var socket=io();
     
     const left_tab = document.getElementById('hist_tab');
@@ -223,7 +223,7 @@ hr.solid {
                 'Content-Type': 'application/json'
             }
         }
-        var response_init_load = await fetch(END_POINT + "/load_chat_history", options);
+        var response_init_load = await fetch("/load_chat_history", options);
         response_init = await response_init_load.json(); //console.log('response_init', response_init);
         for(var i in response_init)
         {
