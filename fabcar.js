@@ -391,7 +391,7 @@ class FabCar extends Contract {
         };
         
         /*const userAsBytes = await ctx.stub.getState(userID);
-        if(userAsBytes || userIDuserAsBytes.length > 0)
+        if(userAsBytes || userAsBytes.length > 0)
         {
             return('user already registed');
         }
