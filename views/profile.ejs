@@ -110,7 +110,9 @@
     {
         console.log(content.value);
         socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
-             'receiver': response_json.user_id, 'message': content.value})
+             'receiver': response_json.user_id, 'message': content.value});
+        content.value='';
+        alert('Message sent');
     }
     var modal = document.getElementById("myModal");
 
