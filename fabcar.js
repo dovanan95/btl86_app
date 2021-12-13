@@ -10,9 +10,9 @@ const { Contract } = require('fabric-contract-api');
 
 class FabCar extends Contract {
 
-    async initLedger(ctx) {
+    /*async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        /*const user = [
+        const user = [
             {
                 userID: 'DVA',
                 name: 'Do Van An',
@@ -95,7 +95,7 @@ class FabCar extends Contract {
 				content: 'vcl',
 				timestamp: 5
 			},
-		]*/
+		]
         const cars = [
             {
                 color: 'blue',
@@ -164,10 +164,24 @@ class FabCar extends Contract {
             await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
             console.info('Added <--> ', cars[i]);
         }
+        
+        for(let j=0; j<message.length; j++)
+        {
+            message[j].docType = 'private_message';
+            await ctx.stub.putState(message[j]['messID'], Buffer.from(JSON.stringify(message[j])));
+            console.info('ADD:', message[j]);
+        }
+
+        for(let ii=0; ii<user.length; ii++)
+        {
+            user[ii].docType = 'user';
+            await ctx.stub.putState(user[ii]['userID'], Buffer.from(JSON.stringify(user[ii])));
+            console.info('ADD: ', user[ii]);
+        }
         console.info('============= END : Initialize Ledger ===========');
-    }
-    /*
-    async initUser(ctx)
+    }*/
+    
+    async initLedger(ctx)
     {
         const user = [
             {
@@ -224,7 +238,7 @@ class FabCar extends Contract {
         }
     }
 
-    async initMess(ctx)
+    /*async initMess(ctx)
     {
         const message = [
 			{
@@ -391,7 +405,7 @@ class FabCar extends Contract {
         };
         
         /*const userAsBytes = await ctx.stub.getState(userID);
-        if(userAsBytes || userAsBytes.length > 0)
+        if(userAsBytes || userIDuserAsBytes.length > 0)
         {
             return('user already registed');
         }
