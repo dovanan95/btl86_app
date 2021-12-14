@@ -351,11 +351,11 @@ class FabCar extends Contract {
             "selector":{"userID":userID, "password":password, "docType":"user"}
         };
         var result = await this.queryCustom(ctx, JSON.stringify(query_authen));
-        if(result) //recheck
+        if(JSON.parse(result.toString()).length>0)
         {
-            return({'result':'OK', 'username':result[0].name})
+            return(true);
         }
-        else
+        else if(JSON.parse(result.toString()).length==0)
         {
             return(false);
         }
@@ -453,8 +453,8 @@ class FabCar extends Contract {
             command_recv_history:[]
         };
         
-        /*const userAsBytes = await ctx.stub.getState(userID);
-        if(userAsBytes || userIDuserAsBytes.length > 0)
+        const userAsBytes = await ctx.stub.getState(userID);
+        if(JSON.parse(userAsBytes.toString()).length>0)
         {
             return('user already registed');
         }
@@ -462,9 +462,9 @@ class FabCar extends Contract {
         {
             await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
             return('finish');
-        }*/
-        await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
-            return('finish');
+        }
+        /*await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
+            return('finish');*/
     }
 
     async createCar(ctx, carNumber, make, model, color, owner) {
