@@ -8,6 +8,10 @@ var http = require("http");
 const server = http.createServer(app);
 const cors = require('cors');
 
+const { Gateway, Wallets } = require('fabric-network');
+const fs = require('fs');
+const path = require('path');
+
 
 const socketIo = require("socket.io")(server, {
    cors: {
@@ -29,7 +33,7 @@ async function queryNameUser(id){
     socket.on("sendRoom", function(data) {
       console.log(data);
       
-      //socketIo.emit("sendDataServer", { 'data': data, 'socket': socket.id });
+      //socketIo.emit(receiver, { 'data': data, 'socket': socket.id });
     })
     socket.on("sendMess", async function(data){
        console.log(data);

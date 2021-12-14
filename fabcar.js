@@ -194,6 +194,7 @@ class FabCar extends Contract {
                 password: '6868',
                 command_history: [
                     {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'BTC', 'username': 'Bitcoin', 'docType': 'private_message'},
                 ]
             },
             {
@@ -206,27 +207,47 @@ class FabCar extends Contract {
                 password: '6868',
                 command_recv_history: [
                     {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'TVT',
                 name: 'Tong Viet Trung',
                 Phone: '0931910JQK',
-                certification: 'Tien Si Xau Xa',
+                certification: 'Tien Si',
                 position: 'Pho Tu Lenh',
                 dept: 'BTL',
                 password: '6868',
-                command_recv_history: []
+                command_recv_history: [
+                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
+                ]
             },
             {
                 userID: 'DTC',
                 name: 'Dinh The Cuong',
                 Phone: '0931910JQK',
-                certification: 'Tien Si Xau Xa',
+                certification: 'Dai Hoc',
                 position: 'Tu Lenh',
                 dept: 'BTL',
                 password: '6868',
-                command_recv_history: []
+                command_recv_history: [
+                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
+                ]
+            },
+            {
+                userID: 'BTC',
+                name: 'Bitcoin',
+                Phone: '0931910JQK',
+                certification: 'Giao si',
+                position: 'Hacker',
+                dept: 'BTL',
+                password: '6868',
+                command_recv_history: [
+                    {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
+                ]
             },
         ];
 
@@ -244,6 +265,8 @@ class FabCar extends Contract {
 			{
 				messID: 001,
 				sender: 'DVA',
+                sender_name: 'Do Van An',
+                docType: 'private_message',
 				receiver: 'LTA',
 				content: 'OK',
 				timestamp: 1
@@ -251,6 +274,8 @@ class FabCar extends Contract {
 			{
 				messID: 002,
 				sender: 'LTA',
+                sender_name: 'Le Thi Anh',
+                docType: 'private_message',
 				receiver: 'DVA',
 				content: 'NG',
 				timestamp: 2
@@ -258,6 +283,8 @@ class FabCar extends Contract {
 			{
 				messID: 003,
 				sender: 'TVT',
+                sender_name: 'Tong Viet Trung',
+                docType: 'private_message',
 				receiver: 'LTA',
 				content: 'hehe',
 				timestamp: 3
@@ -265,6 +292,8 @@ class FabCar extends Contract {
 			{
 				messID: 004,
 				sender: 'DVA',
+                sender_name: 'Do Van An',
+                docType: 'private_message',
 				receiver: 'LTA',
 				content: 'grzzz',
 				timestamp: 4
@@ -272,9 +301,29 @@ class FabCar extends Contract {
 			{
 				messID: 005,
 				sender: 'LTA',
+                sender_name: 'Le Thi Anh',
+                docType: 'private_message',
 				receiver: 'DTC',
 				content: 'vcl',
 				timestamp: 5
+			},
+            {
+				messID: 006,
+				sender: 'DTC',
+                sender_name: 'Dinh The Cuong',
+                docType: 'private_message',
+				receiver: 'TVT',
+				content: 'ahihi',
+				timestamp: 6
+			},
+            {
+				messID: 007,
+				sender: 'BTC',
+                sender_name: 'Bitcoin',
+                docType: 'private_message',
+				receiver: 'DVA',
+				content: 'con ga',
+				timestamp: 7
 			},
 		];
 
@@ -301,7 +350,7 @@ class FabCar extends Contract {
         const query_authen={
             "selector":{"userID":userID, "password":password, "docType":"user"}
         };
-        var result = await this.queryCustom(ctx, query_authen);
+        var result = await this.queryCustom(ctx, JSON.stringify(query_authen));
         if(result) //recheck
         {
             return({'result':'OK', 'username':result[0].name})
@@ -478,7 +527,7 @@ class FabCar extends Contract {
                 "limit": 100,
                 "skip":0
             }
-            var result = await this.queryCustom(ctx, query_private_message);
+            var result = await this.queryCustom(ctx, JSON.stringify(query_private_message));
             return(result);
         }
     }
@@ -526,7 +575,7 @@ class FabCar extends Contract {
 		return allResults;
 	}
 
-    async queryAllCars(ctx) {
+    async queryAllData(ctx) {
         const startKey = '';
         const endKey = '';
         const allResults = [];
@@ -545,18 +594,18 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async changeCarOwner(ctx, carNumber, newOwner) {
-        console.info('============= START : changeCarOwner ===========');
+    async changeUserPhone(ctx, userID, newPhone) {
+        console.info('============= START : changeUserPhone ===========');
 
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+        const userAsBytes = await ctx.stub.getState(userID); // get the car from chaincode state
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${userNumber} does not exist`);
         }
-        const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
+        const user = JSON.parse(userAsBytes.toString());
+        user.Phone = newPhone;
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : changeCarOwner ===========');
+        await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : changeUserPhone ===========');
     }
 
 }
