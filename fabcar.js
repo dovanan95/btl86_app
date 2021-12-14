@@ -452,19 +452,22 @@ class FabCar extends Contract {
             dept,
             command_recv_history:[]
         };
-        
-        /*const userAsBytes = await ctx.stub.getState(userID);
-        if(JSON.parse(userAsBytes.toString()).length>0)
+        const query_authen={
+            "selector":{"userID":userID, "docType":"user"}
+        };
+        var result = await this.queryCustom(ctx, JSON.stringify(query_authen));
+        if(JSON.parse(result.toString()).length>0)
         {
-            return('user already registed');
+            return('user already register');
         }
-        else
+        else if(JSON.parse(result.toString()).length==0)
         {
+            //return(false);
             await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
             return('finish');
-        }*/
-        await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
-            return('finish');
+        }
+        //await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
+            //return('finish');
     }
 
     async createCar(ctx, carNumber, make, model, color, owner) {
@@ -520,10 +523,10 @@ class FabCar extends Contract {
                 "selector":{
                     "$or":[
                         {"sender": sender, "receiver": receiver},
-                        {"sender": receiver, "sender": sender}
+                        {"sender": receiver, "receiver": sender}
                     ]
                 },
-                "sort":[{"timestamp":"desc"}],
+                //"sort":[{"timestamp":"desc"}],
                 "limit": 100,
                 "skip":0
             }
