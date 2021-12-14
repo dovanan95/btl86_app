@@ -453,7 +453,7 @@ class FabCar extends Contract {
             command_recv_history:[]
         };
         
-        const userAsBytes = await ctx.stub.getState(userID);
+        /*const userAsBytes = await ctx.stub.getState(userID);
         if(JSON.parse(userAsBytes.toString()).length>0)
         {
             return('user already registed');
@@ -462,9 +462,9 @@ class FabCar extends Contract {
         {
             await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
             return('finish');
-        }
-        /*await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
-            return('finish');*/
+        }*/
+        await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user)));
+            return('finish');
     }
 
     async createCar(ctx, carNumber, make, model, color, owner) {
@@ -481,31 +481,31 @@ class FabCar extends Contract {
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : Create Car ===========');
     }
-    async savePrivateMessage(ctx, sender, sender_name, receiver, content)
+    async savePrivateMessage(ctx, messID, sender, sender_name, receiver, content, timestamp)
     {
         var message = {
-            messID: Date.now(),
+            messID,
             docType: 'private_message',
             sender,
             receiver,
             content,
             sender_name,
-            timestamp: Date.now()
+            timestamp,
         }
         await ctx.stub.putState(messID, Buffer.from(JSON.stringify(message)));
         console.log('saved message');
     }
 
-    async saveGroupMessage(ctx, room_id, sender, sender_name, content)
+    async saveGroupMessage(ctx, messID, room_id, sender, sender_name, content, timestamp)
     {
         var message = {
-            messID: Date.now(),
+            messID,
             docType: 'group_message',
             room_id,
             sender,
             sender_name,
             content,
-            timestamp: Date.now()
+            timestamp,
         }
         await ctx.stub.pushState(messID, Buffer.from(JSON.stringify(message)));
         console.log('saved group message');
