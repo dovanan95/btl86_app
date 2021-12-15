@@ -192,7 +192,7 @@ class FabCar extends Contract {
                 position: 'lao cong',
                 dept: 'BGD',
                 password: '6868',
-                command_history: [
+                command_recv_history: [
                     {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
                     {'userID': 'BTC', 'username': 'Bitcoin', 'docType': 'private_message'},
                 ]
@@ -363,7 +363,7 @@ class FabCar extends Contract {
     
     async queryUser(ctx, userID){
         const userAsBytes = await ctx.stub.getState(userID);
-        if(!userAsBytes || userIDuserAsBytes.length === 0)
+        if(!userAsBytes || userAsBytes.length === 0)
         {
             throw new Error(`${userAsBytes} does not exist`);
         }
@@ -402,12 +402,12 @@ class FabCar extends Contract {
             if(flag==0)
             {
                 var cmd_hist = user_json.command_recv_history;
-                cmd_hist.unshift({'userID': partnerID, 'name': prtner_name});
+                cmd_hist.unshift({'userID': partnerID, 'name': prtner_name, 'docType':'private_message'});
                 user_json.command_recv_history = cmd_hist;
                 await ctx.stub.putState(userID, Buffer.from(JSON.stringify(user_json)));
 
                 var cmd_prtn_hist = prtJson.command_recv_history;
-                cmd_prtn_hist.unshift({'userID': userID, 'name': user_json.name});
+                cmd_prtn_hist.unshift({'userID': userID, 'name': user_json.name, 'docType':'private_message'});
                 prtJson.command_recv_history = cmd_prtn_hist;
                 await ctx.stub.putState(partnerID, Buffer.from(JSON.stringify(prtJson)));
             }
@@ -522,11 +522,11 @@ class FabCar extends Contract {
             const query_private_message = {
                 "selector":{
                     "$or":[
-                        {"sender": sender, "receiver": receiver},
-                        {"sender": receiver, "receiver": sender}
+                        {"sender": sender, "receiver": receiver, "timestamp":{"$gte": 0}},
+                        {"sender": receiver, "receiver": sender, "timestamp":{"$gte": 0}}
                     ]
                 },
-                //"sort":[{"timestamp":"desc"}],
+                "sort":[{"timestamp":"desc"}],
                 "limit": 100,
                 "skip":0
             }
