@@ -516,7 +516,7 @@ class FabCar extends Contract {
         console.log('saved group message');
     }
 
-    async queryMessage(ctx,sender, receiver, docType)
+    async queryMessage(ctx,sender, receiver, docType, limit, skip)
     {
         if(docType=='private_message')
         {
@@ -524,14 +524,14 @@ class FabCar extends Contract {
             const query_private_message = {
                 "selector":{
                     "$or":[
-                        {"sender": 'DVA', "receiver": 'LTA'},
-                        {"sender": 'LTA', "receiver": 'DVA'}
+                        {"sender": sender, "receiver": receiver},
+                        {"sender": receiver, "receiver": sender}
                     ],
                     "timestamp": {"$gt": null}
                 },
                 "sort":[{"timestamp":"desc"}],
-                "limit": 100,
-                "skip":0,
+                "limit": limit,
+                "skip": skip,
                 "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
             }
             var result = await this.queryCustom(ctx, JSON.stringify(query_private_message));
