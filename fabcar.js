@@ -526,7 +526,7 @@ class FabCar extends Contract {
                         {"sender": receiver, "receiver": sender, "timestamp":{"$gte": 0}}
                     ]
                 },
-                "sort":[{"timestamp":"desc"}],
+                //"sort":[{"timestamp":"desc"}],
                 "limit": 100,
                 "skip":0
             }
