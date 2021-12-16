@@ -353,7 +353,9 @@ class FabCar extends Contract {
         var result = await this.queryCustom(ctx, JSON.stringify(query_authen));
         if(JSON.parse(result.toString()).length>0)
         {
-            return(true);
+            var user = JSON.parse(result.toString());
+            var username = user[0].Record.name;
+            return(username);
         }
         else if(JSON.parse(result.toString()).length==0)
         {
@@ -526,7 +528,7 @@ class FabCar extends Contract {
                         {"sender": receiver, "receiver": sender, "timestamp":{"$gte": 0}}
                     ]
                 },
-                //"sort":[{"timestamp":"desc"}],
+                "sort":[{"timestamp":"desc"}],
                 "limit": 100,
                 "skip":0
             }
