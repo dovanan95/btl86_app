@@ -524,13 +524,15 @@ class FabCar extends Contract {
             const query_private_message = {
                 "selector":{
                     "$or":[
-                        {"sender": sender, "receiver": receiver, "timestamp":{"$gte": 0}},
-                        {"sender": receiver, "receiver": sender, "timestamp":{"$gte": 0}}
-                    ]
+                        {"sender": 'DVA', "receiver": 'LTA'},
+                        {"sender": 'LTA', "receiver": 'DVA'}
+                    ],
+                    "timestamp": {"$gt": null}
                 },
                 "sort":[{"timestamp":"desc"}],
                 "limit": 100,
-                "skip":0
+                "skip":0,
+                "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
             }
             var result = await this.queryCustom(ctx, JSON.stringify(query_private_message));
             return(result);
