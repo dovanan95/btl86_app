@@ -2,13 +2,15 @@
 const query_private_message = {
     "selector":{
         "$or":[
-            {"sender": "xxx", "receiver": "yyy"},
-            {"sender": "yyy", "sender": "xxx"}
-        ]
+            {"sender": 'DVA', "receiver": 'LTA'},
+            {"sender": 'LTA', "receiver": 'DVA'}
+        ],
+        "timestamp": {"$gt": null}
     },
     "sort":[{"timestamp":"desc"}],
     "limit": 100,
-    "skip":0
+    "skip":0,
+    "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
 }
 
 const query_room_message = {
