@@ -530,8 +530,8 @@ class FabCar extends Contract {
                     "timestamp": {"$gt": null}
                 },
                 "sort":[{"timestamp":"desc"}],
-                "limit": limit,
-                "skip": skip,
+                "limit": parseInt(limit),
+                "skip": parseInt(skip),
                 "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
             }
             var result = await this.queryCustom(ctx, JSON.stringify(query_private_message));
