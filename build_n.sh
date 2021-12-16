@@ -1,4 +1,6 @@
 #An Do, [21. 12. 15. AM 4:30]
+../fabcar
+./networkDown.sh
 ./network.sh down
 ./network.sh up createChannel -ca -s couchdb
 cd addOrg3/
