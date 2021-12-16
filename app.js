@@ -12,31 +12,37 @@ const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
-let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+async function contract()
+{
+    const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
+    let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
-        // Create a new file system based wallet for managing identities.
-const walletPath = path.join(process.cwd(), 'wallet');
-const wallet = await Wallets.newFileSystemWallet(walletPath);
-console.log(`Wallet path: ${walletPath}`);
+            // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), 'wallet');
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
 
-        // Check to see if we've already enrolled the user.
-const identity = await wallet.get('appUser');
-if (!identity) {
-    console.log('An identity for the user "appUser" does not exist in the wallet');
-    console.log('Run the registerUser.js application before retrying');
-    return;
+            // Check to see if we've already enrolled the user.
+    const identity = await wallet.get('appUser');
+    if (!identity) {
+        console.log('An identity for the user "appUser" does not exist in the wallet');
+        console.log('Run the registerUser.js application before retrying');
+        return;
+    }
+
+            // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, { wallet, identity: 'appUser', discovery: { enabled: true, asLocalhost: true } });
+
+            // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork('mychannel');
+
+            // Get the contract from the network.
+    const contract = network.getContract('fabcar');
+
+    return contract;
 }
 
-        // Create a new gateway for connecting to our peer node.
-const gateway = new Gateway();
-await gateway.connect(ccp, { wallet, identity: 'appUser', discovery: { enabled: true, asLocalhost: true } });
-
-        // Get the network (channel) our contract is deployed to.
-const network = await gateway.getNetwork('mychannel');
-
-        // Get the contract from the network.
-const contract = network.getContract('fabcar');
 const socketIo = require("socket.io")(server, {
    cors: {
        origin: "*",
@@ -61,6 +67,11 @@ async function queryNameUser(id){
     })
     socket.on("sendMess", async function(data){
        console.log(data);
+
+       const contract_ = await contract();
+       await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
+                    data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
+        await contract_.submitTransaction('updateCommandHistory', data.sender.toString(), data.receiver.toString(), 'private_message');
        //save message to server then response to receiver
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
@@ -100,28 +111,28 @@ app.post('/login',async function(req, res){
 
 var sample_chat_data = [
         {   
-            userID: '001',
-            username: 'LTE',
+            userID: 'DVA',
+            username: 'Do Van An',
             docType: 'private_message',
             message_block:
             [
                 {
-                    'sender': '001',
-                    'receiver': 'myID',
+                    'sender': 'DVA',
+                    'receiver': 'LTA',
                     'content': 'hello',
                     'timestamp': 1,
                     'docType': 'private_message'
                 },
                 {
-                    'sender': 'myID',
-                    'receiver': '001',
+                    'sender': 'LTA',
+                    'receiver': 'DVA',
                     'content': 'bye',
                     'timestamp': 2,
                     'docType': 'private_message'
                 },
                 {
-                    'sender': 'myID',
-                    'receiver': '001',
+                    'sender': 'DVA',
+                    'receiver': 'LTA',
                     'content': 'ahihi',
                     'timestamp': 3,
                     'docType': 'private_message'
@@ -130,35 +141,35 @@ var sample_chat_data = [
         },
         {
             
-            userID: '002',
-            username: 'LTA',
+            userID: 'LTA',
+            username: 'Le Thi Anh',
             docType: 'private_message',
             message_block:
             [
                 {
-                    'sender': '002',
-                    'receiver': 'myID',
+                    'sender': 'LTA',
+                    'receiver': 'DVA',
                     'content': 'Ok em',
                     'timestamp': 1,
                     'docType': 'private_message'
                 },
                 {
-                    'sender': 'myID',
-                    'receiver': '002',
+                    'sender': 'DVA',
+                    'receiver': 'LTA',
                     'content': 'Vang',
                     'timestamp': 2,
                     'docType': 'private_message'
                 },
                 {
-                    'sender': 'myID',
-                    'receiver': '002',
+                    'sender': 'DVA',
+                    'receiver': 'LTA',
                     'content': 'Em xin cam on',
                     'timestamp': 3,
                     'docType': 'private_message'
                 },
                 {
-                    'sender': '002',
-                    'receiver': 'myID',
+                    'sender': 'LTA',
+                    'receiver': 'DVA',
                     'content': 'Khong co gi',
                     'timestamp': 4,
                     'docType': 'private_message'
@@ -172,9 +183,27 @@ app.get('/chat', function(req, res){
     res.render('./views/chat');
 })
 
-app.post('/load_chat_history', function(req, res){
+app.post('/load_chat_history', async function(req, res){
     console.log(req.body.id);
-    const chat_data = contract.evaluateTransaction('queryMessage');
+    const contract_ = await contract();
+    /*
+    const query_private_message = {
+        "selector":{
+            "$or":[
+                {"sender": 'DVA', "receiver": 'LTA'},
+                {"sender": 'LTA', "receiver": 'DVA'}
+            ],
+            "timestamp": {"$gt": null}
+        },
+        "sort":[{"timestamp":"desc"}],
+        "limit": 100,
+        "skip":0,
+        "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
+    }
+    const result_6 = await contract_.evaluateTransaction('queryCustom',JSON.stringify(query_private_message));
+    console.log('custom query 4:', result_6.toString());*/
+    const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
+    console.log(chat_data.toString());
     res.send(JSON.stringify(sample_chat_data));
 })
 
