@@ -247,6 +247,7 @@ hr.solid {
         if(docType=='private_message')
         {
             //code
+            //data: {'sender': myID, 'receiver': partner_id}
         }
         return(block);
     }
@@ -257,7 +258,7 @@ hr.solid {
         //callAPI(id)
         if(docType=='private_message')
         {
-            var block = await getBlockByID(id, docType); //API call result
+            var block_ = await getBlockByID(id, docType); //API call result
             var username;
             for(var k in response_init)
             {
@@ -269,20 +270,20 @@ hr.solid {
             for(var i in block)
             {
                 var mess_block;
-                if(block[i].sender==id)
+                if(block[i].Record.sender==id)
                 {
                     mess_block = `
                             <div class="container">
                                 <h3 style="color:red;">${username}</h3>
-                                <p style="color:red;">${block[i].content}</p>
+                                <p style="color:red;">${block[i].Record.content}</p>
                             </div>`
                 }
-                else if(block[i].sender != id)
+                else if(block[i].Record.sender != id)
                 {
                     mess_block = `
                             <div class="container darker">
                                 <h3>${my_name}</h3>
-                                <p>${block[i].content}</p>
+                                <p>${block[i].Record.content}</p>
                             </div>`
                 }
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
