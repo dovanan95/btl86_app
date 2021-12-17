@@ -344,6 +344,7 @@ hr.solid {
                 messContainer.scrollTop = messContainer.scrollHeight;
                 socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
                 'receiver': current_partner, 'message': messContent.value});
+                messContent.value='';
             }
             
         }    
