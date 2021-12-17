@@ -48,7 +48,7 @@ body {
 }
 </style>
 </head>
-<body>
+<body onload="checkLogin()">
 
 <h2 style="margin:left; padding-left: 10px;">Search Button</h2>
 
@@ -69,6 +69,17 @@ body {
 <script>
     var id = document.getElementById("input_ID");
     var infor = document.getElementById('exist');
+
+    function checkLogin(){
+       var check = sessionStorage.getItem('login_data');
+       sessionStorage.removeItem('current_partner_id');
+  
+       var check_json = JSON.parse(check);
+       if(check_json ==null || check_json.isLogin != true)
+       {
+           window.location.href='/';
+       }
+    }
     async function search()
     {
         var res = await fetch('/searchUserByID?id='+id.value);
