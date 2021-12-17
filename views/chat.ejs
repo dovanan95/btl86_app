@@ -251,22 +251,23 @@ hr.solid {
         }
         return(block);
     }
-    async function choosePartnet_2(id){
+    async function choosePartner_2(id){
         sessionStorage.setItem('current_partner_id', id);
+        message_zone.innerHTML=``;
         var partner_element = document.getElementById(id);
         var docType = partner_element.getAttribute('docType');
         //callAPI(id)
         if(docType=='private_message')
         {
             var block_ = await getBlockByID(id, docType); //API call result
-            var username;
+            /*var username;
             for(var k in response_init)
             {
                 if(response_init[k].userID==id)
                 {
                     username=response_init[k].username;
                 }
-            }
+            }*/
             for(var i in block)
             {
                 var mess_block;
@@ -274,7 +275,7 @@ hr.solid {
                 {
                     mess_block = `
                             <div class="container">
-                                <h3 style="color:red;">${username}</h3>
+                                <h3 style="color:red;">${block[i].Record.sender_name}</h3>
                                 <p style="color:red;">${block[i].Record.content}</p>
                             </div>`
                 }
