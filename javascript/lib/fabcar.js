@@ -350,14 +350,14 @@ class FabCar extends Contract {
         const query_authen={
             "selector":{"userID":userID, "password":password, "docType":"user"}
         };
-        var result = await this.queryCustom(ctx, JSON.stringify(query_authen));
+        const result = await this.queryCustom(ctx, JSON.stringify(query_authen));
         if(JSON.parse(result.toString()).length>0)
         {
             var user = JSON.parse(result.toString());
             var username = user[0].Record.name;
             return(username);
         }
-        else if(JSON.parse(result.toString()).length==0)
+        else if(!result || JSON.parse(result.toString()).length==0)
         {
             return(false);
         }

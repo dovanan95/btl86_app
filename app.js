@@ -105,8 +105,18 @@ app.get('/', function(req, res){
 })
 app.post('/login',async function(req, res){
     console.log(req.body);
-    var username = await queryNameUser(req.body.id);
-    res.send({'result': 'OK', 'username': username});
+    //var username = await queryNameUser(req.body.id);
+    var _contract = await contract();
+    const authen = await _contract.evaluateTransaction('authentication', req.body.id, req.body.pw);
+    if(await authen.toString() != 'false')
+    {
+        res.send({'result': 'OK', 'username': authen.toString()});
+    }
+    else if(await authen.toString() == 'false')
+    {
+        res.send({'result': 'NG'});
+    }
+    
 })
 
 var sample_chat_data = [
@@ -202,8 +212,8 @@ app.post('/load_chat_history', async function(req, res){
     }
     const result_6 = await contract_.evaluateTransaction('queryCustom',JSON.stringify(query_private_message));
     console.log('custom query 4:', result_6.toString());*/
-    const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
-    console.log(chat_data.toString());
+    //const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
+    //console.log(chat_data.toString());
     res.send(JSON.stringify(sample_chat_data));
 })
 
