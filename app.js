@@ -71,7 +71,8 @@ async function queryNameUser(id){
        const contract_ = await contract();
        await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
                     data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
-        await contract_.submitTransaction('updateCommandHistory', data.sender.toString(), data.receiver.toString(), 'private_message');
+        await contract_.submitTransaction('updateCommandHistory', 
+                    data.sender.toString(), data.receiver.toString(), 'private_message');
        //save message to server then response to receiver
        socketIo.emit(String(data.receiver),
         {'sender': data.sender, 
@@ -194,7 +195,6 @@ app.get('/chat', function(req, res){
 })
 
 app.post('/load_chat_history', async function(req, res){
-    console.log(req.body.id);
     const contract_ = await contract();
     /*
     const query_private_message = {
@@ -214,12 +214,17 @@ app.post('/load_chat_history', async function(req, res){
     console.log('custom query 4:', result_6.toString());*/
     //const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
     //console.log(chat_data.toString());
-    res.send(JSON.stringify(sample_chat_data));
+    const chat_history_raw = await contract_.evaluateTransaction('queryHistoryMessage', req.body.id); console.log(chat_history_raw);
+    res.send(chat_history_raw.toString());
 })
 
 //for chat one to one from chat history
-app.post('/chat_peer', function(req, res){
-    console.log({'partner_ID': req.body.partner_ID, 'my_ID': req.body.my_ID});
+app.post('/chat_peer', async function(req, res){
+    const contract_ = await contract();
+    console.log({'partner_ID': req.body.partner_ID, 'my_ID': req.body.my_ID, 'limit': req.body.limit, 'skip': req.body.skip});
+    const chat_data = await contract_.evaluateTransaction('queryMessage', req.body.my_ID, 
+                        req.body.partner_ID, 'private_message', req.body.limit, req.body.skip);
+    res.send(chat_data.toString());
 })
 
 //for chat room (dev in future)

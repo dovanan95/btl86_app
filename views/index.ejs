@@ -129,7 +129,7 @@ span.psw {
           'Content-Type': 'application/json'
        }
     }
-    var res = await fetch(END_POINT + "/login", options);
+    var res = await fetch("/login", options);
     var json_res = await res.json();
     console.log(json_res);
     if(json_res.result=='OK')

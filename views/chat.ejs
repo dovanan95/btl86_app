@@ -234,7 +234,7 @@ hr.solid {
             console.log(response_init[i]);
             var tab_partner_el = 
             `
-                <button class="tablinks" onclick=choosePartner(this.id) docType=${response_init[i].docType}
+                <button class="tablinks" onclick=choosePartner_2(this.id) docType=${response_init[i].docType}
                 id="${response_init[i].userID}">${response_init[i].username}</button>
                 <hr class="solid">
             `
@@ -247,7 +247,16 @@ hr.solid {
         if(docType=='private_message')
         {
             //code
-            //data: {'sender': myID, 'receiver': partner_id}
+            var data = {'my_ID': myID, 'partner_ID': partner_id, 'limit': 100, 'skip': 0};
+            const options = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            var getPrivMessBlock = await fetch('/chat_peer', options);
+            block = await getPrivMessBlock.json();
         }
         return(block);
     }
@@ -260,14 +269,7 @@ hr.solid {
         if(docType=='private_message')
         {
             var block_ = await getBlockByID(id, docType); //API call result
-            /*var username;
-            for(var k in response_init)
-            {
-                if(response_init[k].userID==id)
-                {
-                    username=response_init[k].username;
-                }
-            }*/
+            block =block_.reverse(); 
             for(var i in block)
             {
                 var mess_block;
