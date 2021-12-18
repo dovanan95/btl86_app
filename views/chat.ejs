@@ -170,6 +170,8 @@ hr.solid {
                             </div>`;
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
                 messContainer.scrollTop = messContainer.scrollHeight;
+
+                reloadLeftTab(data.sender);
             }
             else if(data.sender != current_partner)
             {   
@@ -189,7 +191,11 @@ hr.solid {
                         id="${data.sender}">${data.sender_name}</button>
                         <hr class="solid">
                     `
-                    left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+                    left_tab.insertAdjacentHTML("afterbegin", tab_partner_el);
+                }
+                else if(flag==1)
+                {
+                    reloadLeftTab(data.sender);
                 }
                 
             }
@@ -202,6 +208,24 @@ hr.solid {
             document.getElementById('button_send_mess').click();
         } 
     })
+    function reloadLeftTab(id){
+        
+        var childLeftButton = left_tab.children;
+        var index; var tab;
+        for(let i=0; i<childLeftButton.length; i++)
+        {
+            var childItem = childLeftButton[i];
+            if(childItem.id==id)
+            {
+                index = i;
+                tab=childItem.outerHTML+ `<hr class="solid">`;
+            }
+        }
+        left_tab.removeChild(left_tab.children[index+1]);
+        left_tab.removeChild(document.getElementById(id));
+        left_tab.insertAdjacentHTML('afterbegin', tab);
+    }
+        
 
     function checkLogin(){
        var check = sessionStorage.getItem('login_data');
@@ -292,6 +316,8 @@ hr.solid {
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
             }
         }
+
+        messContainer.scrollTop = messContainer.scrollHeight;
         
     }
 
@@ -347,6 +373,7 @@ hr.solid {
                 socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
                 'receiver': current_partner, 'message': messContent.value});
                 messContent.value='';
+                reloadLeftTab(current_partner);
             }
             
         }    

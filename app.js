@@ -244,14 +244,29 @@ app.get('/home', function(req, res){
 
 const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 //for user search
-app.get('/searchUserByID', function(req, res){
+app.get('/searchUserByID', async function(req, res){
     console.log(req.query.id);
+    const query_user={
+        "selector":{"userID": req.query.id, "docType":"user"}
+    };
     //neccessary to check if userID exist and response true/false
-    if(req.query.id=='001') //only for test, change condition when finish develop chaincode
+    const contract_ = await contract();
+    const user = await contract_.evaluateTransaction('queryCustom', JSON.stringify(query_user));
+    
+    if(user) //only for test, change condition when finish develop chaincode
     {
-        res.send(JSON.stringify({'data': sample_user_data_1}));
+        const user_json = JSON.parse(user.toString());
+        const response_data = {
+            'userID': user_json[0].Record.userID,
+            'name': user_json[0].Record.name,
+            'phone': user_json[0].Record.Phone,
+            'certification': user_json[0].Record.certification,
+            'position': user_json[0].Record.position,
+            'dept': user_json[0].Record.dept,
+        }
+        res.send(JSON.stringify({'data': response_data}));
     }
-    else
+    else if(!user)
     {
         res.send(JSON.stringify({'data': 'no_data'}));
     }
@@ -261,7 +276,12 @@ app.get('/user_information', function(req, res){
     var user_id = req.query.id_user;
     var user_name = req.query.username;
     res.render('./views/profile',
-    {'data':JSON.stringify({'user_id': user_id, 'user_name': user_name})});
+    {'data':JSON.stringify(
+        {
+            'userID': user_id, 
+            'name': user_name
+        })
+    });
 })
 
 server.listen(8082, () => {

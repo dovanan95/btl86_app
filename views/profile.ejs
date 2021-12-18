@@ -91,16 +91,16 @@
 
     var response_json = JSON.parse(response_init);
     function loadUI()
-    {  
-        id.innerHTML='ID: '+response_json.user_id;
-        username.innerHTML='name: '+ response_json.user_name;
+    {   console.log(response_init);
+        id.innerHTML='ID: '+response_json.userID;
+        username.innerHTML='name: '+ response_json.name;
     }
     function connect()
     {
         var myID_json = sessionStorage.getItem('login_data');
         var myID = JSON.parse(myID_json)['id'];
         var my_name = JSON.parse(myID_json)['my_username'];
-        sessionStorage.setItem('current_partner_id',response_json.user_id);
+        sessionStorage.setItem('current_partner_id',response_json.userID);
 
         var to_user = document.getElementById('to_user');
         to_user.innerHTML='To: '+response_json.user_name; 
@@ -110,7 +110,7 @@
     {
         console.log(content.value);
         socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
-             'receiver': response_json.user_id, 'message': content.value});
+             'receiver': response_json.userID, 'message': content.value});
         content.value='';
         alert('Message sent');
     }

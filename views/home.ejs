@@ -70,6 +70,9 @@ body {
     var id = document.getElementById("input_ID");
     var infor = document.getElementById('exist');
 
+    var myID_json = sessionStorage.getItem('login_data');
+        var myID = JSON.parse(myID_json)['id'];
+
     function checkLogin(){
        var check = sessionStorage.getItem('login_data');
        sessionStorage.removeItem('current_partner_id');
@@ -82,6 +85,12 @@ body {
     }
     async function search()
     {
+      if(myID==id.value)
+      {
+        alert('this is your ID');
+      } 
+      else
+      {
         var res = await fetch('/searchUserByID?id='+id.value);
         var res_json = await res.json();
         console.log(res_json);
@@ -93,11 +102,13 @@ body {
         {
           infor.innerHTML='user: ';
           var node=document.createElement('a');
-          var text_node = document.createTextNode(res_json.data['username']);
+          var text_node = document.createTextNode(res_json.data['name']);
           node.appendChild(text_node);
           node.href="/user_information?id_user="+res_json.data['userID']
-          +"&username="+res_json.data['username'];
+          +"&username="+res_json.data['name'];
           infor.appendChild(node);
         }
+      }
+        
     }
 </script>
