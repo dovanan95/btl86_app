@@ -440,8 +440,19 @@ class FabCar extends Contract {
         
     }
 
+    async queryHistoryMessage(ctx, userID){
+        const userAsBytes = await ctx.stub.getState(userID);
+        if(!userAsBytes || userAsBytes.length === 0)
+        {
+            throw new Error(`${userAsBytes} does not exist`);
+        }
+        var user = JSON.parse(userAsBytes.toString());
+        var messageHistory = user.command_recv_history
+        return JSON.stringify(messageHistory);
+    }
+
     async createUser(ctx, userID, name, Phone, certification, position, dept, password) {
-        console.info('============= START : Create Car ===========');
+        console.info('============= START : Create User ===========');
 
         const user = {
             userID,
