@@ -1,1 +1,1 @@
-Communication Application on Hyperledger Fabric Blockchain platorm
+Communication Application on Hyperledger Fabric Blockchain platform
