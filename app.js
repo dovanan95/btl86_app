@@ -253,7 +253,7 @@ app.get('/searchUserByID', async function(req, res){
     const contract_ = await contract();
     const user = await contract_.evaluateTransaction('queryCustom', JSON.stringify(query_user));
     
-    if(user) //only for test, change condition when finish develop chaincode
+    if(user) 
     {
         const user_json = JSON.parse(user.toString());
         const response_data = {
