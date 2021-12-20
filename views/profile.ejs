@@ -103,7 +103,7 @@
         sessionStorage.setItem('current_partner_id',response_json.userID);
 
         var to_user = document.getElementById('to_user');
-        to_user.innerHTML='To: '+response_json.user_name; 
+        to_user.innerHTML='To: '+response_json.name; 
         modal.style.display = "block";
     }
     function sendMess()
