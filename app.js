@@ -253,13 +253,13 @@ app.get('/searchUserByID', async function(req, res){
     const contract_ = await contract();
     const user = await contract_.evaluateTransaction('queryCustom', JSON.stringify(query_user));
     
-    if(user) 
+    if(user) //only for test, change condition when finish develop chaincode
     {
         const user_json = JSON.parse(user.toString());
         const response_data = {
             'userID': user_json[0].Record.userID,
             'name': user_json[0].Record.name,
-            'phone': user_json[0].Record.Phone,
+            'Phone': user_json[0].Record.Phone,
             'certification': user_json[0].Record.certification,
             'position': user_json[0].Record.position,
             'dept': user_json[0].Record.dept,
@@ -279,7 +279,11 @@ app.get('/user_information', function(req, res){
     {'data':JSON.stringify(
         {
             'userID': user_id, 
-            'name': user_name
+            'name': user_name,
+            'Phone': req.query.Phone,
+            'dept': req.query.dept,
+            'certification': req.query.certification,
+            'position': req.query.position
         })
     });
 })

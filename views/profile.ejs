@@ -47,6 +47,10 @@
         <div>
             <p id="name">name:</p>
             <p id="ID">ID:</p>
+            <p id="position">Position:</p>
+            <p id="dept">Depatment:</p>
+            <p id="cert">Certification:</p>
+            <p id="Phone">Phone:</p>
         </div>  
         <div>
             <button id="chat_button" onclick="connect()">Contact</button>
@@ -81,6 +85,10 @@
     var response_init = '<%-data%>';
     var id = document.getElementById('ID');
     var username = document.getElementById('name');
+    var position = document.getElementById('position');
+    var dept = document.getElementById('dept');
+    var Phone = document.getElementById('Phone');
+    var cert = document.getElementById("cert");
     var content = document.getElementById('content');
 
     var myID_json = sessionStorage.getItem('login_data');
@@ -94,6 +102,10 @@
     {   console.log(response_init);
         id.innerHTML='ID: '+response_json.userID;
         username.innerHTML='name: '+ response_json.name;
+        position.innerHTML='Position: '+ response_json.position;
+        dept.innerHTML= 'Department: '+ response_json.dept;
+        Phone.innerHTML= 'Phone: '+ response_json.Phone;
+        cert.innerHTML='Certification: '+ response_json.certification;
     }
     function connect()
     {

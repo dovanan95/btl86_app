@@ -60,7 +60,7 @@ body {
     </div>
 </div>
 <div class="div2" style="margin:left; padding-left: 10px;">
-    <p id="exist">ahihi</p>
+    <p id="exist">Find by ID</p>
 </div>
 
 
@@ -105,7 +105,9 @@ body {
           var text_node = document.createTextNode(res_json.data['name']);
           node.appendChild(text_node);
           node.href="/user_information?id_user="+res_json.data['userID']
-          +"&username="+res_json.data['name'];
+          +"&username="+res_json.data['name'] + "&Phone="+ res_json.data['Phone']
+          +"&position="+res_json.data['position']+"&dept="+res_json.data['dept']
+          +"&certification="+res_json.data['certification'];
           infor.appendChild(node);
         }
       }
