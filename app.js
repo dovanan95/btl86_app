@@ -313,15 +313,17 @@ app.get('/user_information', function(req, res){
     var user_id = req.query.id_user;
     var user_name = req.query.username;
     res.render('./views/profile',
-    {'data':JSON.stringify(
-        {
-            'userID': user_id, 
-            'name': user_name,
-            'Phone': req.query.Phone,
-            'dept': req.query.dept,
-            'certification': req.query.certification,
-            'position': req.query.position
-        })
+    {
+        'data':JSON.stringify(
+            {
+                'userID': user_id, 
+                'name': user_name,
+                'Phone': req.query.Phone,
+                'dept': req.query.dept,
+                'certification': req.query.certification,
+                'position': req.query.position
+            }
+        )
     });
 })
 
