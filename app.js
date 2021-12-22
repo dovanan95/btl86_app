@@ -66,21 +66,30 @@ async function queryNameUser(id){
       //socketIo.emit(receiver, { 'data': data, 'socket': socket.id });
     })
     socket.on("sendMess", async function(data){
-       console.log(data);
+        try
+        {
+            console.log(data);
 
-       const contract_ = await contract();
-       await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
-                    data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
-        await contract_.submitTransaction('updateCommandHistory', 
-                    data.sender.toString(), data.receiver.toString(), 'private_message');
-       //save message to server then response to receiver
-       socketIo.emit(String(data.receiver),
-        {'sender': data.sender, 
-        'receiver': data.receiver, 
-        'message': data.message, 
-        'sender_name': data.sender_name,
-        'docType': 'private_message'
-    });
+            const contract_ = await contract();
+            await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
+                            data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
+                await contract_.submitTransaction('updateCommandHistory', 
+                            data.sender.toString(), data.receiver.toString(), 'private_message');
+            //save message to server then response to receiver
+            socketIo.emit(String(data.receiver),
+                {
+                    'sender': data.sender, 
+                    'receiver': data.receiver, 
+                    'message': data.message, 
+                    'sender_name': data.sender_name,
+                    'docType': 'private_message'
+            });
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
+       
     })
   
     socket.on("disconnect", () => {
@@ -105,17 +114,22 @@ app.get('/', function(req, res){
     res.render('./views/index', {'data':'Commander System'});
 })
 app.post('/login',async function(req, res){
-    console.log(req.body);
-    //var username = await queryNameUser(req.body.id);
-    var _contract = await contract();
-    const authen = await _contract.evaluateTransaction('authentication', req.body.id, req.body.pw);
-    if(await authen.toString() != 'false')
-    {
-        res.send({'result': 'OK', 'username': authen.toString()});
+    try{
+        console.log(req.body);
+        //var username = await queryNameUser(req.body.id);
+        var _contract = await contract();
+        const authen = await _contract.evaluateTransaction('authentication', req.body.id, req.body.pw);
+        if(await authen.toString() != 'false')
+        {
+            res.send({'result': 'OK', 'username': authen.toString()});
+        }
+        else if(await authen.toString() == 'false')
+        {
+            res.send({'result': 'NG'});
+        }
     }
-    else if(await authen.toString() == 'false')
-    {
-        res.send({'result': 'NG'});
+    catch(error){
+        console.log(error);
     }
     
 })
@@ -195,36 +209,51 @@ app.get('/chat', function(req, res){
 })
 
 app.post('/load_chat_history', async function(req, res){
-    const contract_ = await contract();
-    /*
-    const query_private_message = {
-        "selector":{
-            "$or":[
-                {"sender": 'DVA', "receiver": 'LTA'},
-                {"sender": 'LTA', "receiver": 'DVA'}
-            ],
-            "timestamp": {"$gt": null}
-        },
-        "sort":[{"timestamp":"desc"}],
-        "limit": 100,
-        "skip":0,
-        "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
+    try
+    {
+        const contract_ = await contract();
+        /*
+        const query_private_message = {
+            "selector":{
+                "$or":[
+                    {"sender": 'DVA', "receiver": 'LTA'},
+                    {"sender": 'LTA', "receiver": 'DVA'}
+                ],
+                "timestamp": {"$gt": null}
+            },
+            "sort":[{"timestamp":"desc"}],
+            "limit": 100,
+            "skip":0,
+            "use_index": ["_design/indexPrivMessDoc", "indexPrivMess"]
+        }
+        const result_6 = await contract_.evaluateTransaction('queryCustom',JSON.stringify(query_private_message));
+        console.log('custom query 4:', result_6.toString());*/
+        //const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
+        //console.log(chat_data.toString());
+        const chat_history_raw = await contract_.evaluateTransaction('queryHistoryMessage', req.body.id); console.log(chat_history_raw);
+        res.send(chat_history_raw.toString());
     }
-    const result_6 = await contract_.evaluateTransaction('queryCustom',JSON.stringify(query_private_message));
-    console.log('custom query 4:', result_6.toString());*/
-    //const chat_data = await contract_.evaluateTransaction('queryMessage', 'DVA', 'LTA', 'private_message', 100, 0);
-    //console.log(chat_data.toString());
-    const chat_history_raw = await contract_.evaluateTransaction('queryHistoryMessage', req.body.id); console.log(chat_history_raw);
-    res.send(chat_history_raw.toString());
+    catch(error)
+    {
+        console.log(error);
+    }
+    
 })
 
 //for chat one to one from chat history
 app.post('/chat_peer', async function(req, res){
-    const contract_ = await contract();
-    console.log({'partner_ID': req.body.partner_ID, 'my_ID': req.body.my_ID, 'limit': req.body.limit, 'skip': req.body.skip});
-    const chat_data = await contract_.evaluateTransaction('queryMessage', req.body.my_ID, 
-                        req.body.partner_ID, 'private_message', req.body.limit, req.body.skip);
-    res.send(chat_data.toString());
+    try
+    {
+        const contract_ = await contract();
+        console.log({'partner_ID': req.body.partner_ID, 'my_ID': req.body.my_ID, 'limit': req.body.limit, 'skip': req.body.skip});
+        const chat_data = await contract_.evaluateTransaction('queryMessage', req.body.my_ID, 
+                            req.body.partner_ID, 'private_message', req.body.limit, req.body.skip);
+        res.send(chat_data.toString());
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
 })
 
 //for chat room (dev in future)
@@ -245,31 +274,39 @@ app.get('/home', function(req, res){
 const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 //for user search
 app.get('/searchUserByID', async function(req, res){
-    console.log(req.query.id);
-    const query_user={
-        "selector":{"userID": req.query.id, "docType":"user"}
-    };
-    //neccessary to check if userID exist and response true/false
-    const contract_ = await contract();
-    const user = await contract_.evaluateTransaction('queryCustom', JSON.stringify(query_user));
-    
-    if(user) //only for test, change condition when finish develop chaincode
+    try
     {
-        const user_json = JSON.parse(user.toString());
-        const response_data = {
-            'userID': user_json[0].Record.userID,
-            'name': user_json[0].Record.name,
-            'Phone': user_json[0].Record.Phone,
-            'certification': user_json[0].Record.certification,
-            'position': user_json[0].Record.position,
-            'dept': user_json[0].Record.dept,
+        console.log(req.query.id);
+        const query_user={
+            "selector":{"userID": req.query.id, "docType":"user"}
+        };
+        //neccessary to check if userID exist and response true/false
+        const contract_ = await contract();
+        const user = await contract_.evaluateTransaction('queryCustom', JSON.stringify(query_user));
+        
+        if(user) //only for test, change condition when finish develop chaincode
+        {
+            const user_json = JSON.parse(user.toString());
+            const response_data = {
+                'userID': user_json[0].Record.userID,
+                'name': user_json[0].Record.name,
+                'Phone': user_json[0].Record.Phone,
+                'certification': user_json[0].Record.certification,
+                'position': user_json[0].Record.position,
+                'dept': user_json[0].Record.dept,
+            }
+            res.send(JSON.stringify({'data': response_data}));
         }
-        res.send(JSON.stringify({'data': response_data}));
+        else if(!user)
+        {
+            res.send(JSON.stringify({'data': 'no_data'}));
+        }
     }
-    else if(!user)
+    catch(error)
     {
-        res.send(JSON.stringify({'data': 'no_data'}));
+        console.log(error);
     }
+    
 })
 
 app.get('/user_information', function(req, res){
