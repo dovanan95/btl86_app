@@ -12,3 +12,7 @@ cd ..
 cd ../fabcar/javascript/
 node enrollAdmin.js
 node registerUser.js
+npm install
+npm install express
+npm install multer
+npm install ejs
