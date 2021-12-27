@@ -117,18 +117,18 @@ async function main() {
                 return hash;
         };
         
-        async function getblock(block_number){
+        async function getblock(block_number, channel_name){
             const contract_1 = network.getContract('qscc');
             const resultByte = await contract_1.evaluateTransaction(
                 'GetBlockByNumber',
-                'mychannel',
+                channel_name,
                 String(block_number)
             );
             const resultJson = BlockDecoder.decode(resultByte);
             return resultJson;
         }
 
-        var block = await getblock(76); console.log('block', block);
+        var block = await getblock(77, 'mychannel'); console.log('block', block);
         var header = block['header']; console.log('header', header);
         var calculatedBlockHash = await calculateBlockHash(header); console.log('hashed: ', calculatedBlockHash);
 
