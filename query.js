@@ -130,7 +130,7 @@ async function main() {
 
         var block = await getblock(76); console.log('block', block);
         var header = block['header']; console.log('header', header);
-        var calculatedBlockHash = await calculateBlockHash(header); console.log(calculatedBlockHash);
+        var calculatedBlockHash = await calculateBlockHash(header); console.log('hashed: ', calculatedBlockHash);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
