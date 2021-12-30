@@ -186,67 +186,67 @@ class FabCar extends Contract {
         const user = [
             {
                 userID: 'DVA',
-                name: 'Dev Vlog X',
+                name: 'Do Van An',
                 Phone: '0931910JQK',
-                certification: 'Mam non',
-                position: 'Youtuber',
-                dept: 'R&D',
+                certification: 'mau giao',
+                position: 'lao cong',
+                dept: 'BGD',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi A', 'docType': 'private_message'},
-                    {'userID': 'BTC', 'username': 'Bui Thi C', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'BTC', 'username': 'Bitcoin', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'LTA',
-                name: 'Le Thi A',
+                name: 'Le Thi Anh',
                 Phone: '0931910JQK',
-                certification: 'Dai Hoc',
-                position: 'Customer Service',
-                dept: 'CSKH',
+                certification: 'Tien Si Xau Xa',
+                position: 'Pho Phong',
+                dept: 'CCTC',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'DVA', 'username': 'Dev Vlog X', 'docType': 'private_message'},
-                    {'userID': 'DTC', 'username': 'Dao Thi C', 'docType': 'private_message'},
-                    {'userID': 'TVT', 'username': 'Tran Van T', 'docType': 'private_message'},
+                    {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'TVT',
-                name: 'Tran Van T',
+                name: 'Tong Viet Trung',
                 Phone: '0931910JQK',
-                certification: 'Dai Hoc',
-                position: 'Giam doc kinh doanh',
-                dept: 'HR',
+                certification: 'Tien Si',
+                position: 'Pho Tu Lenh',
+                dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi A', 'docType': 'private_message'},
-                    {'userID': 'DTC', 'username': 'Dao Thi C', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'DTC',
-                name: 'Dao Thi C',
+                name: 'Dinh The Cuong',
                 Phone: '0931910JQK',
                 certification: 'Dai Hoc',
-                position: 'Truong phong marketing',
-                dept: 'Business Planning',
+                position: 'Tu Lenh',
+                dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi A', 'docType': 'private_message'},
-                    {'userID': 'TVT', 'username': 'Tran Van T', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
                 ]
             },
             {
-                userID: 'Bui Thi C',
+                userID: 'BTC',
                 name: 'Bitcoin',
                 Phone: '0931910JQK',
-                certification: 'Mam non',
-                position: 'Sale',
-                dept: 'To chuc su kien',
+                certification: 'Giao si',
+                position: 'Hacker',
+                dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'DVA', 'username': 'Dev Vlog X', 'docType': 'private_message'},
+                    {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
                 ]
             },
         ];
@@ -509,6 +509,7 @@ class FabCar extends Contract {
             timestamp,
         }
         await ctx.stub.putState(messID, Buffer.from(JSON.stringify(message)));
+        await this.updateCommandHistory(ctx, sender, receiver, 'private_message');
         console.log('saved message');
     }
 
@@ -523,7 +524,7 @@ class FabCar extends Contract {
             content,
             timestamp,
         }
-        await ctx.stub.pushState(messID, Buffer.from(JSON.stringify(message)));
+        await ctx.stub.putState(messID, Buffer.from(JSON.stringify(message)));
         console.log('saved group message');
     }
 

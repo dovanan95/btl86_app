@@ -69,13 +69,6 @@ async function queryNameUser(id){
         try
         {
             console.log(data);
-
-            const contract_ = await contract();
-            await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
-                            data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
-                await contract_.submitTransaction('updateCommandHistory', 
-                            data.sender.toString(), data.receiver.toString(), 'private_message');
-            //save message to server then response to receiver
             socketIo.emit(String(data.receiver),
                 {
                     'sender': data.sender, 
@@ -84,6 +77,12 @@ async function queryNameUser(id){
                     'sender_name': data.sender_name,
                     'docType': 'private_message'
             });
+            const contract_ = await contract();
+            await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
+                            data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
+                /*await contract_.submitTransaction('updateCommandHistory', 
+                            data.sender.toString(), data.receiver.toString(), 'private_message');*/
+            //save message to server then response to receiver
         }
         catch(error)
         {
