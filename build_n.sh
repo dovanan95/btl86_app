@@ -16,3 +16,7 @@ npm install
 npm install express
 npm install multer
 npm install ejs
+
+
+#xem block 
+docker logs peer0.org0.example.com -f
