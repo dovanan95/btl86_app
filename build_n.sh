@@ -16,6 +16,7 @@ npm install
 npm install express
 npm install multer
 npm install ejs
+docker update --restart unless-stopped $(docker ps -q)
 
 
 #xem block 
