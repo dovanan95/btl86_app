@@ -75,7 +75,7 @@ async function main() {
         //await contract.submitTransaction('changeUserPhone', 'BTC','12345367');
 
         const messHistory = await contract.evaluateTransaction('queryHistoryMessage', 'LTA');
-        console.log(messHistory.toString());
+        //console.log(messHistory.toString());
         const authen = await contract.evaluateTransaction('queryUser', 'DVA'); //console.log(authen.toString());
         //get block content
         const contract_1 = network.getContract('qscc');
