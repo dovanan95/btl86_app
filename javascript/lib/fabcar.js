@@ -189,7 +189,7 @@ class FabCar extends Contract {
                 name: 'Do Van An',
                 Phone: '0931910JQK',
                 certification: 'mau giao',
-                position: 'lao cong',
+                position: 'admin',
                 dept: 'BGD',
                 password: '6868',
                 command_recv_history: [
