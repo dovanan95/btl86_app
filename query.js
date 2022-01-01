@@ -48,7 +48,7 @@ async function main() {
         //const result = await contract.evaluateTransaction('queryAllData');
         //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         const result_2 = await contract.evaluateTransaction('queryCustom','{"selector":{"docType":"user","userID":"BTC"}}');
-        console.log('custome query 1', result_2.toString());
+        //console.log('custome query 1', result_2.toString());
         //const result_3 = await contract.evaluateTransaction('queryCustom','{"selector":{"password":"6868","userID":"LTA"}}');
         //console.log('custom query 2:', result_3.toString());
         //const result_4 = await contract.evaluateTransaction('queryCustom','{"selector":{"password":"6869","userID":"LTA"}}');
