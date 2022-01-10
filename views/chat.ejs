@@ -46,7 +46,7 @@ body {font-family: "Lato", sans-serif;}
   width: 70%;
   border-left: none;
   height: 500px;
-  overflow: auto;
+
 
 }
 
@@ -120,25 +120,35 @@ hr.solid {
   background: rgb(0, 180, 50);
 }
 
+#mess_container {
+    height: 85%;
+    overflow: auto;
+}
+
 </style>
 <html>
     <body onload="checkLogin()">
         <h1>COMMAND</h1>
         <%- include('./header')%>
-        <div class="tab" id='hist_tab'>
-            <!--button class="tablinks" >Chat History</button-->
-          </div>
-          <div id='mess_container' class="tabcontent">
-              <div id="message_bubble">
-                <h3>Message</h3>
-                <!--p>Chat Content</p-->
-              </div>
-            
-          </div>
-          <div class="msger-inputarea">  
-            <input id='inputMess'  class="msger-input" placeholder="Input Message Here"/>
-            <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
+        <div>
+            <div class="tab" id='hist_tab'>
+                <!--button class="tablinks" >Chat History</button-->
+            </div>
+            <div class="tabcontent">
+                <div id='mess_container' >
+                    <div id="message_bubble">
+                      <h3>Message</h3>
+                      <!--p>Chat Content</p-->
+                    </div>
+                  
+                </div>
+                <div class="msger-inputarea">  
+                    <input id='inputMess'  class="msger-input" placeholder="Input Message Here"/>
+                    <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
+                </div>
+            </div>
         </div>
+        
     </body>
 </html>
 <script type="text/javascript" src="./socket.io.min.js"></script>
