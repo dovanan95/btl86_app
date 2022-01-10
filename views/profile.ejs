@@ -40,6 +40,12 @@
           text-decoration: none;
           cursor: pointer;
         }
+
+        #content{
+            width: 70% ;
+            height: 30% ;
+            box-sizing: border-box;
+        }
         </style>
     <h1>PROFILE</h1>
     <%- include('./header')%>
@@ -64,7 +70,7 @@
                 <span class="close">&times;</span>
                 <p id="to_user">Message:</p>
                 <div>
-                    <textarea id="content" name="content" placeholder="Write Message.." style="height:200px; width: auto;"></textarea>
+                    <textarea id="content" name="content" placeholder="Write Message.." ></textarea>
                 </div>
                 <br/>
                 <div>
