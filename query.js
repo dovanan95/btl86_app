@@ -78,19 +78,6 @@ async function main() {
         //console.log(messHistory.toString());
         const authen = await contract.evaluateTransaction('queryUser', 'DVA'); //console.log(authen.toString());
         //get block content
-        const contract_1 = network.getContract('qscc');
-        const resultByte = await contract_1.evaluateTransaction(
-            'GetBlockByNumber',
-            'mychannel',
-            String(78)
-        );
-        const resultJson = BlockDecoder.decode(resultByte);
-        //console.log(resultJson['metadata']['metadata'][0]['signatures']);
-        //console.log(resultJson['data']['data'][0]['payload']);
-        //console.log(JSON.stringify(resultJson));
-        var decode_previous_hash = JSON.parse(Buffer.from(JSON.stringify(resultJson['header']['previous_hash'])).toString()); 
-        //console.log(decode_previous_hash);
-        //end get block 碼頭姑娘
 
         const { TextEncoder, TextDecoder } = require("util");
         const crypto = require('crypto');
@@ -128,7 +115,7 @@ async function main() {
             return resultJson;
         }
 
-        var block = await getblock(77, 'mychannel'); console.log('block', block);
+        var block = await getblock(22, 'mychannel'); console.log('block',block);
         var header = block['header']; console.log('header', header);
         var calculatedBlockHash = await calculateBlockHash(header); console.log('hashed: ', calculatedBlockHash);
 
