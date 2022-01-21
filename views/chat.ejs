@@ -166,7 +166,9 @@ hr.solid {
         var myID = JSON.parse(myID_json)['id'];
         var my_name = JSON.parse(myID_json)['my_username'];
 
-    socket.on(myID, function(data){
+    socket.emit('connected', myID);
+
+    socket.on('incoming_mess', function(data){
         console.log(data);
         var current_partner = sessionStorage.getItem('current_partner_id');
         if(data.docType=='private_message')

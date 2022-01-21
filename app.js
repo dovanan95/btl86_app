@@ -54,11 +54,17 @@ async function queryNameUser(id){
     //query chaincode
     return("name_test");
 }
+ var time_queue = 0;
+var users = [];
 
  socketIo.on("connection", (socket) => {
     console.log("New client connected ->" + socket.id);
     const ID = socket.id // id property on the socket Object
     socketIo.to(ID).emit("getId", socket.id);
+
+    socket.on('connected', function(userID){
+        users[userID]=socket.id;
+    })
   
     socket.on("sendRoom", function(data) {
       console.log(data);
@@ -69,7 +75,7 @@ async function queryNameUser(id){
         try
         {
             console.log(data);
-            socketIo.emit(String(data.receiver),
+            socketIo.to(users[data.receiver]).emit('incoming_mess',
                 {
                     'sender': data.sender, 
                     'receiver': data.receiver, 
@@ -77,9 +83,14 @@ async function queryNameUser(id){
                     'sender_name': data.sender_name,
                     'docType': 'private_message'
             });
+            time_queue++; console.log(time_queue);
             const contract_ = await contract();
-            await contract_.submitTransaction('savePrivateMessage', 'MessID'+ Date.now().toString(),
+            
+            var genDate='MessPriv' + Date.now().toString();
+
+            await contract_.submitTransaction('savePrivateMessage', genDate + time_queue.toString(),
                             data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
+            
                 /*await contract_.submitTransaction('updateCommandHistory', 
                             data.sender.toString(), data.receiver.toString(), 'private_message');*/
             //save message to server then response to receiver
