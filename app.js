@@ -86,7 +86,7 @@ var users = [];
             time_queue++; console.log(time_queue);
             const contract_ = await contract();
             
-            var genDate='MessPriv' + Date.now().toString();
+            var genDate='MessPriv.' + data.sender+'.'+data.receiver+'.' + Date.now().toString();
 
             await contract_.submitTransaction('savePrivateMessage', genDate + time_queue.toString(),
                             data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
