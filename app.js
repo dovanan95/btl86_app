@@ -64,6 +64,7 @@ var users = [];
 
     socket.on('connected', function(userID){
         users[userID]=socket.id;
+        console.log(users);
     })
   
     socket.on("sendRoom", function(data) {
@@ -83,7 +84,7 @@ var users = [];
                     'sender_name': data.sender_name,
                     'docType': 'private_message'
             });
-            time_queue++; console.log(time_queue);
+            time_queue++; //console.log(time_queue);
             const contract_ = await contract();
             
             var genDate='MessPriv.' + data.sender+'.'+data.receiver+'.' + Date.now().toString();
@@ -103,7 +104,7 @@ var users = [];
     })
   
     socket.on("disconnect", () => {
-      console.log("Client disconnected");
+      console.log("Client disconnected:" + socket.id);
     });
   });
 
