@@ -161,6 +161,7 @@ hr.solid {
     const message_zone = document.getElementById('message_bubble');
     const messContent = document.getElementById('inputMess');
     const messContainer = document.getElementById('mess_container');
+    var tab_partner_prefix = 'partner_list.';
 
     var myID_json = sessionStorage.getItem('login_data');
         var myID = JSON.parse(myID_json)['id'];
@@ -199,8 +200,8 @@ hr.solid {
                 {
                     var tab_partner_el = 
                     `
-                        <button class="tablinks" onclick=choosePartner_2(this.id) docType=${data.docType}
-                        id="${data.sender}">${data.sender_name}</button>
+                        <button class="tablinks" docType=${data.docType} id="${tab_partner_prefix+response_init[i].userID}"
+                        onclick=choosePartner_2(this) id_sender="${data.sender}">${data.sender_name}</button>
                         <hr class="solid">
                     `
                     left_tab.insertAdjacentHTML("afterbegin", tab_partner_el);
@@ -242,8 +243,7 @@ hr.solid {
     function checkLogin(){
        var check = sessionStorage.getItem('login_data');
        sessionStorage.removeItem('current_partner_id');
-    
-       console.log(response_init);
+
        var check_json = JSON.parse(check);
        if(check_json ==null || check_json.isLogin != true)
        {
@@ -270,8 +270,8 @@ hr.solid {
             console.log(response_init[i]);
             var tab_partner_el = 
             `
-                <button class="tablinks" onclick=choosePartner_2(this.id) docType=${response_init[i].docType}
-                id="${response_init[i].userID}">${response_init[i].username}</button>
+                <button class="tablinks" docType=${response_init[i].docType} id="${tab_partner_prefix+response_init[i].userID}"
+                onclick=choosePartner_2(this) id_sender="${response_init[i].userID}">${response_init[i].username}</button>
                 <hr class="solid">
             `
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
@@ -296,20 +296,21 @@ hr.solid {
         }
         return(block);
     }
-    async function choosePartner_2(id){
-        sessionStorage.setItem('current_partner_id', id);
+    async function choosePartner_2(obj){
+        console.log(obj.getAttribute('id_sender'));
         message_zone.innerHTML=``;
-        var partner_element = document.getElementById(id);
-        var docType = partner_element.getAttribute('docType');
+        var id_partner = obj.getAttribute('id_sender');
+        var docType = obj.getAttribute('docType');
+        sessionStorage.setItem('current_partner_id', id_partner);
         //callAPI(id)
         if(docType=='private_message')
         {
-            var block_ = await getBlockByID(id, docType); //API call result
+            var block_ = await getBlockByID(id_partner, docType); //API call result
             block =block_.reverse(); 
             for(var i in block)
             {
                 var mess_block;
-                if(block[i].Record.sender==id)
+                if(block[i].Record.sender==id_partner)
                 {
                     mess_block = `
                             <div class="container">
@@ -317,7 +318,7 @@ hr.solid {
                                 <p style="color:red;">${block[i].Record.content}</p>
                             </div>`
                 }
-                else if(block[i].Record.sender != id)
+                else if(block[i].Record.sender != id_partner)
                 {
                     mess_block = `
                             <div class="container darker">
@@ -332,6 +333,18 @@ hr.solid {
         messContainer.scrollTop = messContainer.scrollHeight;
         
     }
+    /*
+    var tab_chats = document.getElementsByClassName('tablinks');
+    var myFunction = function() {
+        var attribute = this.getAttribute("id_sender");
+        console.log(attribute);
+    };
+
+    console.log(tab_chats.length);
+    for(var i=0;i<tab_chats.length;i++){
+        tab_chats[i].addEventListener('click', myFunction, false)
+    }
+    */
 
     function choosePartner(id){
         sessionStorage.setItem('current_partner_id', id);
@@ -369,7 +382,7 @@ hr.solid {
     function sendMess()
     {
         var current_partner = sessionStorage.getItem('current_partner_id');
-        var partner_element = document.getElementById(current_partner);
+        var partner_element = document.getElementById(tab_partner_prefix+ current_partner);
         var docType = partner_element.getAttribute('docType');
         if(current_partner != null)
         {
@@ -385,7 +398,7 @@ hr.solid {
                 socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
                 'receiver': current_partner, 'message': messContent.value});
                 messContent.value='';
-                reloadLeftTab(current_partner);
+                reloadLeftTab(tab_partner_prefix+ current_partner);
             }
             
         }    
