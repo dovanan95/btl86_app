@@ -80,7 +80,7 @@ var online_account = [];
         }
         
         console.log(online_account);
-        socketIo.to(socket.id).emit('online_list', 'test');
+        socketIo.to(socket.id).emit('online_list', online_account);
     })
   
     socket.on("sendRoom", function(data) {

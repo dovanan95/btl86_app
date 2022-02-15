@@ -165,7 +165,7 @@ hr.solid {
     const messContent = document.getElementById('inputMess');
     const messContainer = document.getElementById('mess_container');
     var tab_partner_prefix = 'partner_list.';
-    var network_status='online';
+    var network_status='offline';
 
     var myID_json = sessionStorage.getItem('login_data');
         var myID = JSON.parse(myID_json)['id'];
@@ -175,7 +175,8 @@ hr.solid {
 
     socket.on('online_list', function(data){
         console.log(data);
-        console.log(document.getElementsByClassName('tablinks').length);
+        //console.log(document.getElementsByClassName('tablinks').length);
+        sessionStorage.setItem('online_partner', JSON.stringify({'live':data}));
     })
 
     socket.on('incoming_mess', function(data){
@@ -213,7 +214,7 @@ hr.solid {
                     `
                         <button class="tablinks" docType=${data.docType} id="${tab_partner_prefix+response_init[i].userID}"
                         onclick=choosePartner_2(this) id_sender="${data.sender}"><div>${data.sender_name}</div>
-                        <div style="color:green;">${network_status}</div></button>
+                        <div style="color:red;">${network_status}</div></button>
                         <hr class="solid">
                     `
                     left_tab.insertAdjacentHTML("afterbegin", tab_partner_el);
@@ -284,10 +285,36 @@ hr.solid {
             `
                 <button class="tablinks" docType=${response_init[i].docType} id="${tab_partner_prefix+response_init[i].userID}"
                 onclick=choosePartner_2(this) id_sender="${response_init[i].userID}">
-                <div>${response_init[i].username}</div><div style="color:green;">${network_status}</div></button>
+                <div>${response_init[i].username}</div><div style="color:red;">${network_status}</div></button>
                 <hr class="solid">
             `
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
+        }
+
+        //console.log(document.getElementsByClassName('tablinks').length);
+        var online_partner = sessionStorage.getItem('online_partner');
+        if(online_partner)
+        {
+            var online_prt_json = JSON.parse(online_partner);
+            console.log(online_prt_json['live']);
+            var tablinks = document.getElementsByClassName('tablinks');
+            for(var i=0;i<tablinks.length;i++)
+            {
+                for(var j=0;j<online_prt_json['live'].length;j++)
+                {
+                    let id_sender = tablinks[i].getAttribute('id_sender');
+                    let id_prt = online_prt_json['live'][j]['userID'];
+                    if(id_sender==id_prt)
+                    {
+                        tablinks[i].childNodes[2].innerHTML='online';
+                        tablinks[i].childNodes[2].style.color='green';
+                    }
+                }
+            }
+        }
+        else if(!online_partner)
+        {
+            console.log('ng');
         }
     }
     async function getBlockByID(partner_id, docType){
