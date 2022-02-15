@@ -56,6 +56,7 @@ async function queryNameUser(id){
 }
  var time_queue = 0;
 var users = [];
+var online_account = [];
 
  socketIo.on("connection", (socket) => {
     console.log("New client connected ->" + socket.id);
@@ -64,7 +65,22 @@ var users = [];
 
     socket.on('connected', function(userID){
         users[userID]=socket.id;
-        console.log(users);
+        let flag_online=0;
+        for(let i=0;i<online_account.length;i++)
+        {
+            if(online_account[i]['userID']==userID)
+            {
+                flag_online=1;
+                online_account[i]['socketID']=socket.id;
+            }
+        }
+        if(flag_online==0)
+        {
+            online_account.push({'userID':userID, 'socketID':socket.id});
+        }
+        
+        console.log(online_account);
+        socketIo.to(socket.id).emit('online_list', 'test');
     })
   
     socket.on("sendRoom", function(data) {
@@ -105,6 +121,14 @@ var users = [];
   
     socket.on("disconnect", () => {
       console.log("Client disconnected:" + socket.id);
+      for(let i=0;i<online_account.length;i++)
+      {
+          if(online_account[i]['socketID']==socket.id)
+          {
+              online_account.splice(i,1);
+          }
+      }
+      console.log(online_account);
     });
   });
 

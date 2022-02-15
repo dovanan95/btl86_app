@@ -173,8 +173,15 @@ hr.solid {
 
     socket.emit('connected', myID);
 
+    socket.on('online_list', function(data){
+        console.log(data);
+        console.log(document.getElementsByClassName('tablinks').length);
+    })
+
     socket.on('incoming_mess', function(data){
         console.log(data);
+        //console.log(document.getElementsByClassName('tablinks').length);
+
         var current_partner = sessionStorage.getItem('current_partner_id');
         if(data.docType=='private_message')
         {
