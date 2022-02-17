@@ -127,6 +127,7 @@
     function sendMess()
     {
         console.log(content.value);
+        socket.emit('connected', myID);
         socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
              'receiver': response_json.userID, 'message': content.value});
         content.value='';

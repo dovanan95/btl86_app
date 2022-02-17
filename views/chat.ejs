@@ -212,19 +212,31 @@ hr.solid {
                 {
                     var tab_partner_el = 
                     `
-                        <button class="tablinks" docType=${data.docType} id="${tab_partner_prefix+response_init[i].userID}"
-                        onclick=choosePartner_2(this) id_sender="${data.sender}"><div>${data.sender_name}</div>
-                        <div style="color:red;">${network_status}</div></button>
+                        <button class="tablinks" docType=${data.docType} id="${tab_partner_prefix+data.sender}"
+                        onclick=choosePartner_2(this) id_sender="${data.sender}">
+                            <div style="float:left;">
+                                    <div>${data.sender_name}</div>
+                                    <div style="color:green;">online</div>
+                                </div>
+                            <div style="float:right;">new message</div>
+                        </button>
                         <hr class="solid">
                     `
                     left_tab.insertAdjacentHTML("afterbegin", tab_partner_el);
                 }
                 else if(flag==1)
                 {
+                    if(myID!=data.sender)
+                    {
+                        var partner_tab = document.getElementById(tab_partner_prefix+data.sender);
+                        partner_tab.children[1].innerHTML='new message';
+                    }
+                    
                     reloadLeftTab(tab_partner_prefix+ data.sender);
                 }
                 
             }
+            
         }
         
     })
@@ -285,7 +297,13 @@ hr.solid {
             `
                 <button class="tablinks" docType=${response_init[i].docType} id="${tab_partner_prefix+response_init[i].userID}"
                 onclick=choosePartner_2(this) id_sender="${response_init[i].userID}">
-                <div>${response_init[i].username}</div><div style="color:red;">${network_status}</div></button>
+                    <div style="float:left;">
+                        <div>${response_init[i].username}</div>
+                        <div style="color:red;">${network_status}</div>
+                    </div>
+                    <div style="float:right;">o</div>
+                
+                </button>
                 <hr class="solid">
             `
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
@@ -306,8 +324,8 @@ hr.solid {
                     let id_prt = online_prt_json['live'][j]['userID'];
                     if(id_sender==id_prt)
                     {
-                        tablinks[i].childNodes[2].innerHTML='online';
-                        tablinks[i].childNodes[2].style.color='green';
+                        tablinks[i].children[0].children[1].innerHTML='online';
+                        tablinks[i].children[0].children[1].style.color='green';
                     }
                 }
             }
@@ -338,7 +356,8 @@ hr.solid {
     }
     async function choosePartner_2(obj){
         console.log(obj.getAttribute('id_sender'));
-        console.log(obj.childNodes[2].innerHTML);
+        console.log(obj.children[0].children[1].innerHTML);
+        obj.children[1].innerHTML='o';
         message_zone.innerHTML=``;
         var id_partner = obj.getAttribute('id_sender');
         var docType = obj.getAttribute('docType');
