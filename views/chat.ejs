@@ -177,6 +177,25 @@ hr.solid {
         console.log(data);
         //console.log(document.getElementsByClassName('tablinks').length);
         sessionStorage.setItem('online_partner', JSON.stringify({'live':data}));
+    });
+    socket.on('online_status', function(data){
+        console.log(data);
+        //console.log(document.getElementsByClassName('tablinks').length);
+        var tablinks = document.getElementsByClassName('tablinks');
+        for(var i=0;i<tablinks.length;i++)
+        {
+            var id_sender = tablinks[i].getAttribute('id_sender');
+            if(id_sender==data.userID && data.isOnline==true)
+            {
+                tablinks[i].children[0].children[1].innerHTML='online';
+                tablinks[i].children[0].children[1].style.color='green';
+            } 
+            else if(id_sender==data.userID && data.isOnline==false)
+            {
+                tablinks[i].children[0].children[1].innerHTML='offline';
+                tablinks[i].children[0].children[1].style.color='red';
+            }
+        }
     })
 
     socket.on('incoming_mess', function(data){

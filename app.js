@@ -81,6 +81,7 @@ var online_account = [];
         
         console.log(online_account);
         socketIo.to(socket.id).emit('online_list', online_account);
+        socketIo.emit('online_status', {'userID':userID, 'isOnline': true})
     })
   
     socket.on("sendRoom", function(data) {
@@ -125,7 +126,8 @@ var online_account = [];
       {
           if(online_account[i]['socketID']==socket.id)
           {
-              online_account.splice(i,1);
+            socketIo.emit('online_status', {'userID':online_account[i]['userID'], 'isOnline': false})
+            online_account.splice(i,1);
           }
       }
       console.log(online_account);
