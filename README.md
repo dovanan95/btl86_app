@@ -7,8 +7,8 @@ Setup:
 4. Change directory to  <your_directory>fabric-samples/tree/main/test-network/scripts and execute command: "chmod +x deployCC.sh"
 5. Change directory to <your_directory>fabric-samples/tree/main/test-network and execute command below:
 
-###__Build_Project__###
-cd ../fabcar
+###__Build_Project__### <br />
+cd ../fabcar <br />
 ./networkDown.sh
 cd ../test-network
 ./network.sh down
