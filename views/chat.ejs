@@ -209,8 +209,13 @@ hr.solid {
             {
                 var mess_block = `
                             <div class="container">
-                                <h3 style="color:red;">${data.sender_name}</h3>
-                                <p style="color:red;">${data.message}</p>
+                                <div style="float:left;">
+                                    <h3 style="color:red;">${data.sender_name}</h3>
+                                    <p style="color:red;">${data.message}</p>
+                                </div>
+                                <div style="float:right;">
+                                    <button>...</button>
+                                </div>
                             </div>`;
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
                 messContainer.scrollTop = messContainer.scrollHeight;
@@ -393,16 +398,26 @@ hr.solid {
                 {
                     mess_block = `
                             <div class="container">
-                                <h3 style="color:red;">${block[i].Record.sender_name}</h3>
-                                <p style="color:red;">${block[i].Record.content}</p>
+                                <div style="float:left;">
+                                    <h3 style="color:red;">${block[i].Record.sender_name}</h3>
+                                    <p style="color:red;">${block[i].Record.content}</p>
+                                </div>
+                                <div  style="float:right;">
+                                    <button>...</button>
+                                </div>
                             </div>`
                 }
                 else if(block[i].Record.sender != id_partner)
                 {
                     mess_block = `
                             <div class="container darker">
-                                <h3>${my_name}</h3>
-                                <p>${block[i].Record.content}</p>
+                                <div style="float:left;">
+                                    <h3>${my_name}</h3>
+                                    <p>${block[i].Record.content}</p>
+                                </div>
+                                <div style="float:right;">
+                                    <button>...</button>
+                                </div>
                             </div>`
                 }
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
@@ -412,52 +427,7 @@ hr.solid {
         messContainer.scrollTop = messContainer.scrollHeight;
         
     }
-    /*
-    var tab_chats = document.getElementsByClassName('tablinks');
-    var myFunction = function() {
-        var attribute = this.getAttribute("id_sender");
-        console.log(attribute);
-    };
 
-    console.log(tab_chats.length);
-    for(var i=0;i<tab_chats.length;i++){
-        tab_chats[i].addEventListener('click', myFunction, false)
-    }
-    */
-
-    function choosePartner(id){
-        sessionStorage.setItem('current_partner_id', id);
-        message_zone.innerHTML=``;
-        
-        for(var i in response_init)
-        {
-            if(id==response_init[i].userID)
-            {
-                var block = response_init[i].message_block
-                for(var j in block)
-                {
-                    var mess_block;
-                    if(block[j].sender == response_init[i].userID)
-                    {
-                        mess_block = `
-                        <div class="container">
-                            <h3 style="color:red;">${response_init[i].username}</h3>
-                            <p style="color:red;">${block[j].content}</p>
-                        </div>`
-                    }
-                    else if(block[j].sender != response_init[i].userID)
-                    {
-                        mess_block = `
-                        <div class="container darker">
-                            <h3>${my_name}</h3>
-                            <p>${block[j].content}</p>
-                        </div>`
-                    }
-                    message_zone.insertAdjacentHTML("beforeend", mess_block);
-                }
-            }
-        }
-    }
     function sendMess()
     {
         var current_partner = sessionStorage.getItem('current_partner_id');
@@ -469,8 +439,13 @@ hr.solid {
             {
                 mess_block = `
                         <div class="container darker">
-                            <h3>${my_name}</h3>
-                            <p>${messContent.value}</p>
+                            <div style="float:left;">
+                                <h3>${my_name}</h3>
+                                <p>${messContent.value}</p>
+                            </div>
+                            <div style="float:right;">
+                                <button>...</button>
+                            </div>
                         </div>`;
                 message_zone.insertAdjacentHTML("beforeend", mess_block);
                 messContainer.scrollTop = messContainer.scrollHeight;
