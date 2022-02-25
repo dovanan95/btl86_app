@@ -8,7 +8,7 @@ cd ../test-network
 cd addOrg3/
 ./addOrg3.sh up -c mychannel -ca -s couchdb
 cd ..
-./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl javascript  -ccp ../chaincode/fabcar/javascript/
+./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl javascript  -ccp ../chaincode/fabcar/javascript/ -ccep "AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
 cd ../fabcar/javascript/
 node enrollAdmin.js
 node registerUser.js
