@@ -8,8 +8,8 @@ body {font-family: "Lato", sans-serif;}
   float: left;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
-  width: 30%;
-  height: 500px;
+  width: 25%;
+  height: 700px;
   overflow: auto;
 }
 
@@ -43,9 +43,9 @@ body {font-family: "Lato", sans-serif;}
   float: left;
   padding: 0px 12px;
   border: 1px solid #ccc;
-  width: 70%;
+  width: 75%;
   border-left: none;
-  height: 500px;
+  height: 700px;
 
 
 }
@@ -121,7 +121,7 @@ hr.solid {
 }
 
 #mess_container {
-    height: 85%;
+    height: 90%;
     overflow: auto;
 }
 .netstat{
@@ -133,6 +133,9 @@ hr.solid {
     <body onload="checkLogin()">
         <h1>COMMAND</h1>
         <%- include('./header')%>
+        <div style="background-color: honeydew; height: 30px;;">
+            <button style="float:right; height: 30px;">CALL</button>
+        </div>
         <div>
             <div class="tab" id='hist_tab'>
                 <!--button class="tablinks" >Chat History</button-->
@@ -143,15 +146,14 @@ hr.solid {
                       <h3>Message</h3>
                       <!--p>Chat Content</p-->
                     </div>
-                  
                 </div>
                 <div class="msger-inputarea">  
                     <input id='inputMess'  class="msger-input" placeholder="Input Message Here"/>
                     <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
+                    <button type="button" class="msger-send-btn">FILE</button>
                 </div>
             </div>
         </div>
-        
     </body>
 </html>
 <script type="text/javascript" src="./socket.io.min.js"></script>
