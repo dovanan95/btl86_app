@@ -93,7 +93,7 @@ hr.solid {
 }
 
 .msger-inputarea {
-  display: flex;
+  display:flex;
   padding: 10px;
   border-top: var(--border);
   background: #eee;
@@ -105,8 +105,9 @@ hr.solid {
   font-size: 1em;
 }
 .msger-input {
-  flex: 1;
+  width: 100%;
   background: #ddd;
+  display: block;
 }
 .msger-send-btn {
   margin-left: 10px;
@@ -149,8 +150,9 @@ hr.solid {
                 </div>
                 <div class="msger-inputarea">  
                     <input id='inputMess'  class="msger-input" placeholder="Input Message Here"/>
-                    <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
                     <button type="button" class="msger-send-btn">FILE</button>
+                    <button onclick="sendMess()" id="button_send_mess" class="msger-send-btn">SEND</button>
+                    
                 </div>
             </div>
         </div>
