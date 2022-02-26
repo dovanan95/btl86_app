@@ -128,6 +128,12 @@ hr.solid {
 .netstat{
     color:green;
 }
+.block_func_btn{
+    display: block;
+}
+.block_func_btn:hover button{
+    display: none;
+}
 
 </style>
 <html>
@@ -211,17 +217,8 @@ hr.solid {
         {
             if(data.sender == current_partner)
             {
-                var mess_block = `
-                            <div class="container">
-                                <div style="float:left;">
-                                    <h3 style="color:red;">${data.sender_name}</h3>
-                                    <p style="color:red;">${data.message}</p>
-                                </div>
-                                <div style="float:right;">
-                                    <button>...</button>
-                                </div>
-                            </div>`;
-                message_zone.insertAdjacentHTML("beforeend", mess_block);
+                var mess_block_t = prtnerMessage(data.sender_name, data.message)
+                message_zone.insertAdjacentHTML("beforeend", mess_block_t);
                 messContainer.scrollTop = messContainer.scrollHeight;
 
                 reloadLeftTab(tab_partner_prefix+ data.sender);
@@ -274,6 +271,35 @@ hr.solid {
             document.getElementById('button_send_mess').click();
         } 
     })
+
+    function myMessage(my_name, content)
+    {
+        var mess_block = `
+                            <div class="container darker">
+                                <div style="float:left;">
+                                    <h3>${my_name}</h3>
+                                    <p>${content}</p>
+                                </div>
+                                <div class="block_func_btn" style="float:right;">
+                                    <button >...</button>
+                                </div>
+                            </div>`
+        return mess_block;
+    }
+    function prtnerMessage(sender_name, content)
+    {
+        var mess_block = `
+                            <div class="container">
+                                <div style="float:left;">
+                                    <h3 style="color:red;">${sender_name}</h3>
+                                    <p style="color:red;">${content}</p>
+                                </div>
+                                <div class="block_func_btn" style="float:right;">
+                                    <button>...</button>
+                                </div>
+                            </div>`
+        return mess_block
+    }
     function reloadLeftTab(id){
         
         var childLeftButton = left_tab.children;
@@ -400,31 +426,13 @@ hr.solid {
                 var mess_block;
                 if(block[i].Record.sender==id_partner)
                 {
-                    mess_block = `
-                            <div class="container">
-                                <div style="float:left;">
-                                    <h3 style="color:red;">${block[i].Record.sender_name}</h3>
-                                    <p style="color:red;">${block[i].Record.content}</p>
-                                </div>
-                                <div  style="float:right;">
-                                    <button>...</button>
-                                </div>
-                            </div>`
+                    mess_block_t = prtnerMessage(block[i].Record.sender_name, block[i].Record.content);
                 }
                 else if(block[i].Record.sender != id_partner)
                 {
-                    mess_block = `
-                            <div class="container darker">
-                                <div style="float:left;">
-                                    <h3>${my_name}</h3>
-                                    <p>${block[i].Record.content}</p>
-                                </div>
-                                <div style="float:right;">
-                                    <button>...</button>
-                                </div>
-                            </div>`
+                    mess_block_t = myMessage(my_name, block[i].Record.content);
                 }
-                message_zone.insertAdjacentHTML("beforeend", mess_block);
+                message_zone.insertAdjacentHTML("beforeend", mess_block_t);
             }
         }
 
@@ -441,17 +449,8 @@ hr.solid {
         {
             if(docType=='private_message')
             {
-                mess_block = `
-                        <div class="container darker">
-                            <div style="float:left;">
-                                <h3>${my_name}</h3>
-                                <p>${messContent.value}</p>
-                            </div>
-                            <div style="float:right;">
-                                <button>...</button>
-                            </div>
-                        </div>`;
-                message_zone.insertAdjacentHTML("beforeend", mess_block);
+                mess_block_t = myMessage(my_name, messContent.value);
+                message_zone.insertAdjacentHTML("beforeend", mess_block_t);
                 messContainer.scrollTop = messContainer.scrollHeight;
                 socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
                 'receiver': current_partner, 'message': messContent.value});
