@@ -186,67 +186,79 @@ class FabCar extends Contract {
         const user = [
             {
                 userID: 'DVA',
-                name: 'Do Van An',
+                name: 'ADMIN',
                 Phone: '0931910JQK',
-                certification: 'mau giao',
+                certification: 'THPT',
                 position: 'admin',
                 dept: 'BGD',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
-                    {'userID': 'BTC', 'username': 'Bitcoin', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Lo Thi A', 'docType': 'private_message'},
+                    {'userID': 'BTC', 'username': 'Bui Thi C', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'LTA',
-                name: 'Le Thi Anh',
+                name: 'Lo Thi A',
                 Phone: '0931910JQK',
-                certification: 'Tien Si Xau Xa',
+                certification: 'Dai Hoc',
                 position: 'Pho Phong',
                 dept: 'CCTC',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
-                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
-                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
+                    {'userID': 'DVA', 'username': 'ADMIN', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dao Thi C', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tran Viet T', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'TVT',
-                name: 'Tong Viet Trung',
+                name: 'Tran Viet T',
                 Phone: '0931910JQK',
                 certification: 'Tien Si',
-                position: 'Pho Tu Lenh',
+                position: 'Truong Phong',
                 dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
-                    {'userID': 'DTC', 'username': 'Dinh The Cuong', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Lo Thi A', 'docType': 'private_message'},
+                    {'userID': 'DTC', 'username': 'Dao Thi C', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'DTC',
-                name: 'Dinh The Cuong',
+                name: 'Dao Thi C',
                 Phone: '0931910JQK',
                 certification: 'Dai Hoc',
-                position: 'Tu Lenh',
+                position: 'Nhan Vien',
                 dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'LTA', 'username': 'Le Thi Anh', 'docType': 'private_message'},
-                    {'userID': 'TVT', 'username': 'Tong Viet Trung', 'docType': 'private_message'},
+                    {'userID': 'LTA', 'username': 'Lo Thi A', 'docType': 'private_message'},
+                    {'userID': 'TVT', 'username': 'Tran Viet T', 'docType': 'private_message'},
                 ]
             },
             {
                 userID: 'BTC',
-                name: 'Bitcoin',
+                name: 'Bui Thi C',
                 Phone: '0931910JQK',
-                certification: 'Giao si',
-                position: 'Hacker',
+                certification: 'THCS',
+                position: 'Giam Doc',
                 dept: 'BTL',
                 password: '6868',
                 command_recv_history: [
-                    {'userID': 'DVA', 'username': 'Do Van An', 'docType': 'private_message'},
+                    {'userID': 'DVA', 'username': 'ADMIN', 'docType': 'private_message'},
+                ]
+            },
+            {
+                userID: 'NVB',
+                name: 'Nguyen Van B',
+                Phone: '0931910JQK',
+                certification: 'THPT',
+                position: 'Pho Giam Doc',
+                dept: 'BTL',
+                password: '6868',
+                command_recv_history: [
+                    
                 ]
             },
         ];
