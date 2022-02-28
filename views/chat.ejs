@@ -324,7 +324,7 @@ hr.solid {
         console.log(id_block);
         const options = {
             method: 'POST',
-            body: JSON.stringify({'messID': id_block}),
+            body: JSON.stringify({'messID': id_block, 'dateTime': Date.now().toString()}),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -332,9 +332,17 @@ hr.solid {
         var res_block_verify = await fetch('/verifyMessBlockchain', options);
         var res_block_verify_json = await res_block_verify.json();
         console.log(res_block_verify_json);
-        var id_block = res_block_verify_json.messID;
-        var mess_block = document.getElementById(id_block);
-        mess_block.children[0].children[1].innerHTML=res_block_verify_json.content;
+        if(res_block_verify_json.data=="error")
+        {
+            alert("du lieu da bi thay doi");
+        }
+        else
+        {
+            var id_block = res_block_verify_json.messID;
+            var mess_block = document.getElementById(id_block);
+            mess_block.children[0].children[1].innerHTML=res_block_verify_json.content;
+        }
+        
 
     }
     function viewDetailBlock(obj)

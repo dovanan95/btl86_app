@@ -107,7 +107,7 @@ var online_account = [];
 
             await contract_.submitTransaction('savePrivateMessage', data.messID,
                             data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
-            
+            const updated_Mess = await contract_.submitTransaction('verifyMessBlockchain', data.messID, Date.now().toString());
                 /*await contract_.submitTransaction('updateCommandHistory', 
                             data.sender.toString(), data.receiver.toString(), 'private_message');*/
             //save message to server then response to receiver
@@ -301,8 +301,9 @@ app.post('/verifyMessBlockchain', async function(req, res){
     try
     {
         const contract_ = await contract();
-        var dateTime = Date.now().toString();
-        const updated_Mess = await contract_.submitTransaction('verifyMessBlockchain', req.body.messID, dateTime);
+        //var dateTime = Date.now().toString();
+        console.log(req.body);
+        const updated_Mess = await contract_.submitTransaction('verifyMessBlockchain', req.body.messID, req.body.dateTime);
         console.log(updated_Mess.toString());
         res.send(updated_Mess.toString());
 

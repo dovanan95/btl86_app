@@ -522,7 +522,6 @@ class FabCar extends Contract {
         }
         await ctx.stub.putState(messID, Buffer.from(JSON.stringify(message)));
         await this.updateCommandHistory(ctx, sender, receiver, 'private_message');
-        console.log('saved message');
     }
 
     async saveGroupMessage(ctx, messID, room_id, sender, sender_name, content, timestamp)
@@ -607,12 +606,20 @@ class FabCar extends Contract {
 	}
 
     async verifyMessBlockchain(ctx, messID, dateTime){
-        const messBlock = await ctx.stub.getState(messID);
-        const messBlock_json = JSON.parse(messBlock.toString());
-        messBlock_json.verify_time = dateTime;
-        await ctx.stub.putState(messID, Buffer.from(JSON.stringify(messBlock_json)));
-        const messBlock_2 = await ctx.stub.getState(messID);
-        return messBlock_2.toString();
+        try
+        {
+            const messBlock = await ctx.stub.getState(messID);
+            const messBlock_json = JSON.parse(messBlock.toString());
+            messBlock_json.verify_time = dateTime;
+            await ctx.stub.putState(messID, Buffer.from(JSON.stringify(messBlock_json)));
+            const messBlock_2 = await ctx.stub.getState(messID);
+            return messBlock_2.toString();
+        }
+        catch(error)
+        {
+            return error;
+        }
+        
     }
 
     async queryAllData(ctx) {
