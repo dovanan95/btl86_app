@@ -129,10 +129,18 @@ hr.solid {
     color:green;
 }
 .block_func_btn{
+    position: relative;
+    display: inline-block;
+}
+.block_func_btn:hover .dropdown-button{
     display: block;
 }
-.block_func_btn:hover button{
+.dropdown-button{
     display: none;
+    position: absolute;
+    right: 0;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
 }
 
 </style>
@@ -217,7 +225,7 @@ hr.solid {
         {
             if(data.sender == current_partner)
             {
-                var mess_block_t = prtnerMessage(data.sender_name, data.message)
+                var mess_block_t = prtnerMessage(data.messID, data.sender_name, data.message)
                 message_zone.insertAdjacentHTML("beforeend", mess_block_t);
                 messContainer.scrollTop = messContainer.scrollHeight;
 
@@ -272,34 +280,68 @@ hr.solid {
         } 
     })
 
-    function myMessage(my_name, content)
+    function myMessage(id_block, my_name, content)
     {
         var mess_block = `
-                            <div class="container darker">
+                            <div class="container darker" id=${id_block}>
                                 <div style="float:left;">
                                     <h3>${my_name}</h3>
                                     <p>${content}</p>
                                 </div>
                                 <div class="block_func_btn" style="float:right;">
                                     <button >...</button>
+                                    <div class="dropdown-button">
+                                        <button onclick=verifyMessBlock(this) >VERIFY</button>
+                                        <button onclick=viewDetailBlock(this) > VIEW DETAIL</button>
+                                    </div>
                                 </div>
                             </div>`
         return mess_block;
     }
-    function prtnerMessage(sender_name, content)
+    function prtnerMessage(id_block, sender_name, content)
     {
         var mess_block = `
-                            <div class="container">
+                            <div class="container" id=${id_block}>
                                 <div style="float:left;">
                                     <h3 style="color:red;">${sender_name}</h3>
                                     <p style="color:red;">${content}</p>
                                 </div>
                                 <div class="block_func_btn" style="float:right;">
                                     <button>...</button>
+                                    <div class="dropdown-button">
+                                        <button onclick=verifyMessBlock(this) >VERIFY</button>
+                                        <button onclick=viewDetailBlock(this) > VIEW DETAIL</button>
+                                    </div>
                                 </div>
                             </div>`
         return mess_block
     }
+
+    async function verifyMessBlock(obj)
+    {
+        var parentObj = obj.parentElement.parentNode.parentNode;
+        var id_block = parentObj.getAttribute('id');
+        console.log(id_block);
+        const options = {
+            method: 'POST',
+            body: JSON.stringify({'messID': id_block}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        var res_block_verify = await fetch('/verifyMessBlockchain', options);
+        var res_block_verify_json = await res_block_verify.json();
+        console.log(res_block_verify_json);
+        var id_block = res_block_verify_json.messID;
+        var mess_block = document.getElementById(id_block);
+        mess_block.children[0].children[1].innerHTML=res_block_verify_json.content;
+
+    }
+    function viewDetailBlock(obj)
+    {
+        console.log(obj.tagName);
+    }
+
     function reloadLeftTab(id){
         
         var childLeftButton = left_tab.children;
@@ -426,11 +468,11 @@ hr.solid {
                 var mess_block;
                 if(block[i].Record.sender==id_partner)
                 {
-                    mess_block_t = prtnerMessage(block[i].Record.sender_name, block[i].Record.content);
+                    mess_block_t = prtnerMessage(block[i].Record.messID, block[i].Record.sender_name, block[i].Record.content);
                 }
                 else if(block[i].Record.sender != id_partner)
                 {
-                    mess_block_t = myMessage(my_name, block[i].Record.content);
+                    mess_block_t = myMessage(block[i].Record.messID, my_name, block[i].Record.content);
                 }
                 message_zone.insertAdjacentHTML("beforeend", mess_block_t);
             }
@@ -449,10 +491,12 @@ hr.solid {
         {
             if(docType=='private_message')
             {
-                mess_block_t = myMessage(my_name, messContent.value);
+                var messID = 'MessPriv.' + myID+ '.'+ current_partner + '.' + Date.now().toString();
+                console.log(messID);
+                mess_block_t = myMessage(messID, my_name, messContent.value);
                 message_zone.insertAdjacentHTML("beforeend", mess_block_t);
                 messContainer.scrollTop = messContainer.scrollHeight;
-                socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
+                socket.emit("sendMess", {'messID':messID, 'sender': myID, 'sender_name': my_name,
                 'receiver': current_partner, 'message': messContent.value});
                 messContent.value='';
                 reloadLeftTab(tab_partner_prefix+ current_partner);

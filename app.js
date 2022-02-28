@@ -14,7 +14,7 @@ const path = require('path');
 
 async function contract()
 {
-    const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
+    const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org2.example.com', 'connection-org2.json');
     let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
             // Create a new file system based wallet for managing identities.
@@ -54,7 +54,6 @@ async function queryNameUser(id){
     //query chaincode
     return("name_test");
 }
- var time_queue = 0;
 var users = [];
 var online_account = [];
 
@@ -95,18 +94,18 @@ var online_account = [];
             console.log(data);
             socketIo.to(users[data.receiver]).emit('incoming_mess',
                 {
+                    'messID': data.messID,
                     'sender': data.sender, 
                     'receiver': data.receiver, 
                     'message': data.message, 
                     'sender_name': data.sender_name,
                     'docType': 'private_message'
             });
-            time_queue++; //console.log(time_queue);
             const contract_ = await contract();
             
             var genDate='MessPriv.' + data.sender+'.'+data.receiver+'.' + Date.now().toString();
 
-            await contract_.submitTransaction('savePrivateMessage', genDate + time_queue.toString(),
+            await contract_.submitTransaction('savePrivateMessage', data.messID,
                             data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
             
                 /*await contract_.submitTransaction('updateCommandHistory', 
@@ -171,74 +170,7 @@ app.post('/login',async function(req, res){
     
 })
 
-var sample_chat_data = [
-        {   
-            userID: 'DVA',
-            username: 'Do Van An',
-            docType: 'private_message',
-            message_block:
-            [
-                {
-                    'sender': 'DVA',
-                    'receiver': 'LTA',
-                    'content': 'hello',
-                    'timestamp': 1,
-                    'docType': 'private_message'
-                },
-                {
-                    'sender': 'LTA',
-                    'receiver': 'DVA',
-                    'content': 'bye',
-                    'timestamp': 2,
-                    'docType': 'private_message'
-                },
-                {
-                    'sender': 'DVA',
-                    'receiver': 'LTA',
-                    'content': 'ahihi',
-                    'timestamp': 3,
-                    'docType': 'private_message'
-                },
-            ]
-        },
-        {
-            
-            userID: 'LTA',
-            username: 'Le Thi Anh',
-            docType: 'private_message',
-            message_block:
-            [
-                {
-                    'sender': 'LTA',
-                    'receiver': 'DVA',
-                    'content': 'Ok em',
-                    'timestamp': 1,
-                    'docType': 'private_message'
-                },
-                {
-                    'sender': 'DVA',
-                    'receiver': 'LTA',
-                    'content': 'Vang',
-                    'timestamp': 2,
-                    'docType': 'private_message'
-                },
-                {
-                    'sender': 'DVA',
-                    'receiver': 'LTA',
-                    'content': 'Em xin cam on',
-                    'timestamp': 3,
-                    'docType': 'private_message'
-                },
-                {
-                    'sender': 'LTA',
-                    'receiver': 'DVA',
-                    'content': 'Khong co gi',
-                    'timestamp': 4,
-                    'docType': 'private_message'
-                }
-            ]
-        }
-    ];
+
 
 app.get('/chat', function(req, res){
     console.log(req.query.userID);
@@ -292,6 +224,7 @@ app.post('/chat_peer', async function(req, res){
         console.log(error);
     }
 })
+
 
 //for chat room (dev in future)
 app.post('/chat_room', function(req, res){
@@ -362,6 +295,23 @@ app.get('/user_information', function(req, res){
             }
         )
     });
+})
+
+app.post('/verifyMessBlockchain', async function(req, res){
+    try
+    {
+        const contract_ = await contract();
+        var dateTime = Date.now().toString();
+        const updated_Mess = await contract_.submitTransaction('verifyMessBlockchain', req.body.messID, dateTime);
+        console.log(updated_Mess.toString());
+        res.send(updated_Mess.toString());
+
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.send( {"data": "error"});
+    }
 })
 
 server.listen(8082, () => {
