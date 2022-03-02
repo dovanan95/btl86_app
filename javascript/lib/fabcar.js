@@ -611,6 +611,16 @@ class FabCar extends Contract {
             const messBlock = await ctx.stub.getState(messID);
             const messBlock_json = JSON.parse(messBlock.toString());
             messBlock_json.verify_time = dateTime;
+            if(messBlock_json.hasOwnProperty('verify_count'))
+            {
+                var count = parseInt(messBlock_json.verify_count);
+                count++;
+                messBlock_json.verify_count= count.toString();
+            }
+            else if(!messBlock_json.hasOwnProperty('verify_count'))
+            {
+                messBlock_json.verify_count="1";
+            }
             await ctx.stub.putState(messID, Buffer.from(JSON.stringify(messBlock_json)));
             const messBlock_2 = await ctx.stub.getState(messID);
             return messBlock_2.toString();
