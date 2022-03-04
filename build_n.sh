@@ -37,3 +37,6 @@ export CORE_PEER_ADDRESS=localhost:7051
 
 #to take permission to use file in directory
 /directory/:$ chmod +x <file_name>
+
+#version pull command
+curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.4.0
