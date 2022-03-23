@@ -107,7 +107,7 @@ var online_account = [];
 
             await contract_.submitTransaction('savePrivateMessage', data.messID,
                             data.sender, data.sender_name, data.receiver, data.message, parseInt(Date.now()));
-            const updated_Mess = await contract_.submitTransaction('verifyMessBlockchain', data.messID, Date.now().toString());
+            await contract_.submitTransaction('verifyMessBlockchain', data.messID, Date.now().toString());
                 /*await contract_.submitTransaction('updateCommandHistory', 
                             data.sender.toString(), data.receiver.toString(), 'private_message');*/
             //save message to server then response to receiver
@@ -142,12 +142,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/views_h'));
 
 //code
 
 app.get('/', function(req, res){
-    res.render('./views/index', {'data':'Commander System'});
+    res.render('./views_h/index', {'data':'Commander System'});
 })
 app.post('/login',async function(req, res){
     try{
@@ -174,7 +174,7 @@ app.post('/login',async function(req, res){
 
 app.get('/chat', function(req, res){
     console.log(req.query.userID);
-    res.render('./views/chat');
+    res.render('./views_h/chat');
 })
 
 app.post('/load_chat_history', async function(req, res){
@@ -238,7 +238,7 @@ app.post('/init_new_chat', function(req, res){
 
 //for user search result
 app.get('/home', function(req, res){
-    res.render('./views/home');
+    res.render('./views_h/home');
 })
 
 const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
@@ -282,7 +282,7 @@ app.get('/searchUserByID', async function(req, res){
 app.get('/user_information', function(req, res){
     var user_id = req.query.id_user;
     var user_name = req.query.username;
-    res.render('./views/profile',
+    res.render('./views_h/profile',
     {
         'data':JSON.stringify(
             {
