@@ -665,7 +665,7 @@ body {font-family: "Lato", sans-serif;}
         // debugger;
         console.log(obj.getAttribute('id_sender'));
         console.log(obj.children[0].children[1].innerHTML);
-        // obj.children[1].innerHTML='o';
+        obj.children[1].innerHTML='';
         message_zone.innerHTML=``;
         var id_partner = obj.getAttribute('id_sender');
         var docType = obj.getAttribute('docType');
@@ -690,7 +690,7 @@ body {font-family: "Lato", sans-serif;}
             }
         }
 
-        // messContainer.scrollTop = messContainer.scrollHeight;
+        message_zone.scrollTop = message_zone.scrollHeight;
         
     }
 
