@@ -227,7 +227,9 @@
     {
         console.log(content.value);
         socket.emit('connected', myID);
-        socket.emit("sendMess", {'sender': myID, 'sender_name': my_name,
+        var current_partner = response_init.userID;
+        var messID = 'MessPriv.' + myID+ '.'+ current_partner + '.' + Date.now().toString();
+        socket.emit("sendMess", {'messID':messID, 'sender': myID, 'sender_name': my_name,
              'receiver': response_json.userID, 'message': content.value});
         content.value='';
         alert('Message sent');
