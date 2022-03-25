@@ -401,11 +401,13 @@ body {font-family: "Lato", sans-serif;}
             {
                 tablinks[i].children[0].children[1].innerHTML='online';
                 tablinks[i].children[0].children[1].style.color='green';
+                tablinks[i].children[1].style.backgroundColor='green';
             } 
             else if(id_sender==data.userID && data.isOnline==false)
             {
                 tablinks[i].children[0].children[1].innerHTML='offline';
                 tablinks[i].children[0].children[1].style.color='red';
+                tablinks[i].children[1].style.backgroundColor='red';
             }
         }
     })
