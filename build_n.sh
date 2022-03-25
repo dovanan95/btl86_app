@@ -46,7 +46,7 @@ docker exec -it peer0.org1.example.com sh
 
 #kill and restart peer and couchdb
 
-docker kill 55244cf7b317_peer0.org1.example.com
+docker kill peer0.org1.example.com
 docker kill couchdb0
 
 SOCK="${DOCKER_HOST:-/var/run/docker.sock}"
