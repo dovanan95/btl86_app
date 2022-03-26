@@ -239,6 +239,7 @@ body {font-family: "Lato", sans-serif;}
     font-weight: 400;
 }
 
+
 .block_func_btn .dropdown-button button:hover {
     cursor: pointer;
     background-color: #f2f2f2;
@@ -761,7 +762,7 @@ body {font-family: "Lato", sans-serif;}
         
     }
     $(document).on('click', '#menu-btn', function(){
-        debugger;
+        //debugger;
         if ($('.sidebar').hasClass('active')){
             $('.sidebar').removeClass('active');
             $('.chat-container').removeClass('scaledown');
@@ -777,7 +778,7 @@ body {font-family: "Lato", sans-serif;}
             $('.chat-container').addClass('scaledown');
         }
     })
-
+    
     $(document).on('click', '.expand-func-icon', function(){
         console.log(this);
         // debugger;
@@ -786,6 +787,17 @@ body {font-family: "Lato", sans-serif;}
         } else {
             $('.incoming, .outgoing').removeClass('active-dropdown');
             $(this).closest('.outgoing, .incoming').addClass('active-dropdown');
+        }
+    })
+
+    document.addEventListener('click', function(e){
+        if(!e.target.matches('.expand-func-icon'))
+        {
+            var dropdowns = document.getElementsByClassName("active-dropdown");
+            if(dropdowns.length>0)
+            {
+                dropdowns[0].classList.remove("active-dropdown");
+            }
         }
     })
 
