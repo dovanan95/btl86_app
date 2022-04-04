@@ -16,7 +16,7 @@ cd ../test-network <br />
 cd addOrg3/ <br />
 ./addOrg3.sh up -c mychannel -ca -s couchdb <br />
 cd .. <br />
-./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl javascript  -ccp ../chaincode/fabcar/javascript/ <br />
+./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl javascript  -ccp ../chaincode/fabcar/javascript/ -ccep "AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')" <br />
 cd ../fabcar/javascript/ <br />
 node enrollAdmin.js <br />
 node registerUser.js <br />
@@ -24,6 +24,8 @@ npm install <br />
 npm install express <br />
 npm install multer <br />
 npm install ejs <br />
+npm install jsonwebtoken <br />
+npm install dotenv
 docker update --restart unless-stopped $(docker ps -q) <br />
 ###_End_### <br />
 
