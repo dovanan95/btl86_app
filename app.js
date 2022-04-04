@@ -1,4 +1,6 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 var app = express();
 const bodyParser = require('body-parser');
@@ -11,6 +13,7 @@ const cors = require('cors');
 const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
+
 
 async function contract()
 {
@@ -42,6 +45,49 @@ async function contract()
 
     return contract;
 }
+
+const ACCESS_TOKEN_SECRET = 'btl86_qdndvn';
+const REFRESH_TOKEN_SECRET = 'httcddh_blockchain_2022';
+
+function generateAccessToken(id)
+{
+    return jwt.sign({id},ACCESS_TOKEN_SECRET,{expiresIn:"30 days"});
+}
+
+function generateRefreshToken(id)
+{
+    return jwt.sign({id}, REFRESH_TOKEN_SECRET, {expiresIn:"180 days"});
+}
+
+function authenticateAccessToken(req, res, next)
+{
+    let authHeader = req.headers['authorization'];
+    let token = authHeader&&authHeader.split(" ")[1];
+    if(!token){
+        return res.sendStatus(400);
+    }
+    jwt.verify(token, ACCESS_TOKEN_SECRET, (error, user)=>{
+        if(error){
+            res.sendStatus(403);
+        }
+        req.user = user;
+        next();
+    })
+}
+
+app.post("/refreshtoken",(req,res)=>{
+    let refreshtoken= req.body.refreshtoken;
+    if(!refreshtoken){
+        return res.sendStatus(401);
+    }
+    jwt.verify(refreshtoken, REFRESH_TOKEN_SECRET, (error, user)=>{
+        if(error){
+            return res.sendStatus(403);
+        }
+        const accessToken = generateAccessToken(user.id); //user data got from decoded refeshtoken sent from client
+        res.send({"accessToken":accessToken});
+    })
+});
 
 const socketIo = require("socket.io")(server, {
    cors: {
@@ -157,7 +203,9 @@ app.post('/login',async function(req, res){
         const authen = await _contract.evaluateTransaction('authentication', req.body.id, req.body.pw);
         if(await authen.toString() != 'false')
         {
-            res.send({'result': 'OK', 'username': authen.toString()});
+            let accessToken = generateAccessToken(req.body.id);
+            let refeshtoken = generateRefreshToken(req.body.id)
+            res.send({'result': 'OK', 'username': authen.toString(), 'accessToken': accessToken, 'refreshToken': refeshtoken});
         }
         else if(await authen.toString() == 'false')
         {
@@ -171,13 +219,12 @@ app.post('/login',async function(req, res){
 })
 
 
-
 app.get('/chat', function(req, res){
     console.log(req.query.userID);
     res.render('./views_h/chat');
 })
 
-app.post('/load_chat_history', async function(req, res){
+app.post('/load_chat_history', authenticateAccessToken, async function(req, res){
     try
     {
         const contract_ = await contract();
@@ -210,7 +257,7 @@ app.post('/load_chat_history', async function(req, res){
 })
 
 //for chat one to one from chat history
-app.post('/chat_peer', async function(req, res){
+app.post('/chat_peer', authenticateAccessToken, async function(req, res){
     try
     {
         const contract_ = await contract();
@@ -243,7 +290,7 @@ app.get('/home', function(req, res){
 
 const sample_user_data_1 ={'userID': 001, 'username': 'Do Van An'};
 //for user search
-app.get('/searchUserByID', async function(req, res){
+app.get('/searchUserByID', authenticateAccessToken, async function(req, res){
     try
     {
         console.log(req.query.id);

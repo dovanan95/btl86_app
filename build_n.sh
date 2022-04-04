@@ -16,6 +16,8 @@ npm install
 npm install express
 npm install multer
 npm install ejs
+npm install jsonwebtoken
+npm install dotenv
 docker update --restart unless-stopped $(docker ps -q)
 #
 

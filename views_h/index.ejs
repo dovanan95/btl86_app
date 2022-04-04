@@ -290,7 +290,7 @@
     if(json_res.result=='OK')
     {
       sessionStorage.setItem('login_data', JSON.stringify({'id': id.value, 'isLogin': true, 
-      'my_username': json_res.username}));
+      'my_username': json_res.username, 'accessToken': json_res.accessToken, 'refreshToken': json_res.refreshToken}));
       window.location.href='/chat?userID='+id.value;
     }
     else if(json_res.result == 'NG')
