@@ -444,10 +444,10 @@ body {font-family: "Lato", sans-serif;}
                 {
                     var tab_partner_el = 
                     `
-                        <div class="tablinks" docType=${response_init[i].docType} id="${tab_partner_prefix+response_init[i].userID}"
-                        onclick=choosePartner_2(this) id_sender="${response_init[i].userID}">
+                        <div class="tablinks" docType=${data.docType} id="${tab_partner_prefix+data.sender}"
+                        onclick=choosePartner_2(this) id_sender="${data.sender}">
                             <div class="acc-status">
-                                <div class="acc">${response_init[i].username}</div>
+                                <div class="acc">${data.sender_name}</div>
                                 <div class="status-online">${network_status}</div>
                             </div>
                             <div class="dots-online"></div>
