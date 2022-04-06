@@ -187,7 +187,8 @@
 <script type="text/javascript" src="./socket.io.min.js"></script>
 <script src="./jquery-3.6.0.js"></script>
 <script>
-    var response_init = '<%-data%>';
+    //var response_init = '<%-data%>';
+    var response_init = window.opener.user_obj;
     var id = document.getElementById('ID');
     var username = document.getElementById('name');
     var position = document.getElementById('position');
@@ -202,7 +203,8 @@
 
     var socket=io();
 
-    var response_json = JSON.parse(response_init);
+    //var response_json = JSON.parse(response_init);
+    var response_json = response_init;
     function loadUI()
     {   console.log(response_init);
         id.innerHTML='ID: '+response_json.userID;

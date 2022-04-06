@@ -734,6 +734,7 @@ body {font-family: "Lato", sans-serif;}
         search();
         }
     })
+    var user_obj;
     async function search()
     {
         if(myID==id.value) {
@@ -760,13 +761,25 @@ body {font-family: "Lato", sans-serif;}
                 // infor.innerHTML='user: ';
                 // var node=document.createElement('a');
                 // var text_node = document.createTextNode(res_json.data['name']);
-                // node.appendChild(text_node);
-                    var searchUrl="/user_information?id_user="+res_json.data['userID']
-                    +"&username="+res_json.data['name'] + "&Phone="+ res_json.data['Phone']
-                    +"&position="+res_json.data['position']+"&dept="+res_json.data['dept']
-                    +"&certification="+res_json.data['certification'];
-                    window.location.href = searchUrl;
+                // node.appendChild(text_node); 
+                //    var searchUrl="/user_information?id_user="+res_json.data['userID']
+                //   +"&username="+res_json.data['name'] + "&Phone="+ res_json.data['Phone']
+                //    +"&position="+res_json.data['position']+"&dept="+res_json.data['dept']
+                //    +"&certification="+res_json.data['certification'];
+                //    window.location.href = searchUrl;
                 // infor.appendChild(node);
+                    var searchUrl = "/user_information";
+                    user_obj = 
+                    {
+                        'userID': res_json.data['userID'],
+                        'name': res_json.data['name'], 
+                        'Phone': res_json.data['Phone'],
+                        'position':res_json.data['position'],
+                        'dept':res_json.data['dept'],
+                        'certification': res_json.data['certification']
+                    }
+                    var profile = window.open(searchUrl);
+                    profile.user_obj = user_obj;
                 }
         }
         
