@@ -442,18 +442,7 @@ body {font-family: "Lato", sans-serif;}
                 }
                 if(flag==0)
                 {
-                    var tab_partner_el = 
-                    `
-                        <div class="tablinks" docType=${data.docType} id="${tab_partner_prefix+data.sender}"
-                        onclick=choosePartner_2(this) id_sender="${data.sender}">
-                            <div class="acc-status">
-                                <div class="acc">${data.sender_name}</div>
-                                <div class="status-online">${network_status}</div>
-                            </div>
-                            <div class="dots-online"></div>
-                        </div>
-                        <hr class="solid">
-                    `
+                    var tab_partner_el = private_message_left_tab(data.docType, data.sender, data.sender_name)
                     left_tab.insertAdjacentHTML("afterbegin", tab_partner_el);
                 }
                 else if(flag==1)
@@ -520,6 +509,22 @@ body {font-family: "Lato", sans-serif;}
                                 </div>
                             </div>`
         return mess_block
+    }
+    function private_message_left_tab(docType, id, name)
+    {
+        var left_private_block =
+        `
+            <div class="tablinks" docType=${docType} id="${tab_partner_prefix+id}"
+                onclick=choosePartner_2(this) id_sender="${id}">
+                <div class="acc-status">
+                    <div class="acc">${name}</div>
+                    <div class="status-online">${network_status}</div>
+                </div>
+                <div class="dots-online"></div>
+            </div>
+            <hr class="solid">
+        `
+        return left_private_block
     }
 
     async function verifyMessBlock(obj)
@@ -607,18 +612,7 @@ body {font-family: "Lato", sans-serif;}
         for(var i in response_init)
         {
             console.log(response_init[i]);
-            var tab_partner_el = 
-            `
-                <div class="tablinks" docType=${response_init[i].docType} id="${tab_partner_prefix+response_init[i].userID}"
-                onclick=choosePartner_2(this) id_sender="${response_init[i].userID}">
-                    <div class="acc-status">
-                        <div class="acc">${response_init[i].username}</div>
-                        <div class="status-offline">${network_status}</div>
-                    </div>
-                    <div class="dots-online"></div>
-                </div>
-                <hr class="solid">
-            `
+            var tab_partner_el =  private_message_left_tab(response_init[i].docType, response_init[i].userID, response_init[i].username)
             left_tab.insertAdjacentHTML("beforeend", tab_partner_el);
         }
 
